@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magical English Guide</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&family=Sacramento&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
@@ -17,6 +18,10 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            overflow-x: hidden; /* Prevents horizontal scroll */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .navbar {
@@ -80,6 +85,7 @@
         
         .main-content {
             padding: 2rem;
+            flex-grow: 1;
         }
 
         .card-grid {
@@ -90,12 +96,12 @@
             margin: auto;
         }
 
+        /* Updated card styles to use flexbox for horizontal layout */
         .card {
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(8px);
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            text-align: center;
             text-decoration: none;
             color: #f0f0f0;
             transition: transform 0.3s ease, border-color 0.3s ease;
@@ -103,6 +109,11 @@
             position: relative;
             overflow: hidden;
             padding: 1.5rem;
+            
+            display: flex;
+            flex-direction: row; /* Horizontal layout */
+            align-items: center;
+            text-align: left; /* Align text to the left */
         }
 
         .card:hover {
@@ -110,24 +121,160 @@
             border-color: #ffd700;
         }
         
+        .card:hover .card-text p {
+            color: #ffd700; /* Change description color on hover */
+        }
+
         .card-icon {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 1rem;
-            border-radius: 50%;
-            border: 2px solid #ffd700;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            width: 120px; /* Big size for the image */
+            height: 120px;
+            min-width: 120px;
+            min-height: 120px;
+            margin-right: 1.5rem;
+            border-radius: 12px; /* Square corners for the image as per the new design */
+            border: none;
+            box-shadow: none;
+        }
+        
+        .card-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .card h3 {
             font-size: 1.25rem;
             color: #fff;
             margin-top: 0;
+            margin-bottom: 0.5rem;
         }
 
         .card p {
             font-size: 0.9rem;
             color: #ccc;
+            margin-top: 0;
+            transition: color 0.3s ease; /* Smooth transition for the hover effect */
+        }
+        
+        /* Updated styles for the new layout */
+        .info-cards-container {
+            display: flex;
+            flex-direction: row; 
+            justify-content: center;
+            align-items: stretch; /* This is key to making them the same height */
+            padding: 2rem;
+            gap: 2rem;
+            flex-wrap: wrap; 
+        }
+
+        .info-card {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            flex-grow: 1; /* Allows the cards to grow and fill the space */
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Vertically centers content */
+        }
+        
+        /* Specific styling for the date/time and music card block */
+        .date-music-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem; /* Space between date and music player */
+        }
+
+        .date-time {
+            padding: 0; /* Remove padding as it's part of the parent card now */
+            background: none;
+            box-shadow: none;
+            border: none;
+        }
+
+        .music-player {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        /* Font sizes from original screenshot */
+        #date-display, #time-display {
+            font-size: 1.2rem;
+        }
+        
+        #current-song-title {
+            font-size: 1.5rem;
+        }
+        
+        .player-controls {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .player-controls button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .player-controls button:hover {
+            color: #ffd700;
+        }
+        
+        #play-pause-btn {
+            font-size: 2rem;
+        }
+        
+        /* Updated styles for current weather to match the image layout */
+        .current-weather-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .current-weather-info .icon {
+            font-size: 3.5rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .current-weather-info .temp {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .current-weather-info .description {
+            font-size: 1.1rem;
+            color: #ccc;
+            margin-top: 0.5rem;
+        }
+        
+        /* Font sizes for forecast */
+        .weather-day span {
+            font-size: 1.1rem;
+        }
+        
+        .weather-day-icon {
+            font-size: 2.5rem;
+        }
+        
+        h4.weather-title {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -152,54 +299,294 @@
         <!-- Main Content and Card Grid -->
         <section class="main-content">
             <div class="card-grid">
-                <!-- Cards based on the screenshot -->
+                <!-- Cards based on the new layout -->
                 <a href="game-1.html" class="card">
                     <img src="images/icon-tenses.png" alt="English Tenses" class="card-icon">
-                    <h3>English Tenses</h3>
-                    <p>Learn the grammar that matters most.</p>
+                    <div class="card-text">
+                        <h3>English Tenses</h3>
+                        <p>Learn the grammar that matters most.</p>
+                    </div>
                 </a>
                 <a href="game-2.html" class="card">
                     <img src="images/icon-listening.png" alt="Listening Practice" class="card-icon">
-                    <h3>Listening Practice</h3>
-                    <p>Train your ear to understand spoken English.</p>
+                    <div class="card-text">
+                        <h3>Listening Practice</h3>
+                        <p>Train your ear to understand spoken English.</p>
+                    </div>
                 </a>
                 <a href="game-3.html" class="card">
                     <img src="images/icon-medical.png" alt="Medical Terminology" class="card-icon">
-                    <h3>Medical Terminology</h3>
-                    <p>Essential phrases for your career as a nurse.</p>
+                    <div class="card-text">
+                        <h3>Medical Terminology</h3>
+                        <p>Essential phrases for your career as a nurse.</p>
+                    </div>
                 </a>
                 <a href="game-4.html" class="card">
                     <img src="images/icon-reading.png" alt="Reading Practice" class="card-icon">
-                    <h3>Reading Practice</h3>
-                    <p>Read magical stories and improve your comprehension.</p>
+                    <div class="card-text">
+                        <h3>Reading Practice</h3>
+                        <p>Read magical stories and improve your comprehension.</p>
+                    </div>
                 </a>
                 <a href="game-5.html" class="card">
                     <img src="images/icon-sentences.png" alt="Sentence Building" class="card-icon">
-                    <h3>Sentence Building</h3>
-                    <p>Put words together to make perfect sentences.</p>
+                    <div class="card-text">
+                        <h3>Sentence Building</h3>
+                        <p>Put words together to make perfect sentences.</p>
+                    </div>
                 </a>
                 <a href="game-6.html" class="card">
                     <img src="images/icon-speaking.png" alt="Speaking Practice" class="card-icon">
-                    <h3>Speaking Practice</h3>
-                    <p>Talk with a friendly spirit to practice your skills.</p>
+                    <div class="card-text">
+                        <h3>Speaking Practice</h3>
+                        <p>Talk with a friendly spirit to practice your skills.</p>
+                    </div>
                 </a>
                 <a href="game-7.html" class="card">
                     <img src="images/icon-writing.png" alt="Writing Game" class="card-icon">
-                    <h3>Writing Game</h3>
-                    <p>Write enchanting letters to magical creatures.</p>
+                    <div class="card-text">
+                        <h3>Writing Game</h3>
+                        <p>Write enchanting letters to magical creatures.</p>
+                    </div>
                 </a>
                 <a href="game-8.html" class="card">
                     <img src="images/icon-chatbot.png" alt="Chat Game" class="card-icon">
-                    <h3>Chat Game</h3>
-                    <p>Converse with an AI friend to practice conversational English.</p>
+                    <div class="card-text">
+                        <h3>Chat Game</h3>
+                        <p>Converse with an AI friend to practice conversational English.</p>
+                    </div>
                 </a>
                 <a href="tutorial.html" class="card">
                     <img src="images/icon-guide.png" alt="Magical Guide" class="card-icon">
-                    <h3>Your Magical Guide</h3>
-                    <p>Learn how to use this guide to become an English master!</p>
+                    <div class="card-text">
+                        <h3>Your Magical Guide</h3>
+                        <p>Learn how to use this guide to become an English master!</p>
+                    </div>
                 </a>
             </div>
         </section>
+
+        <!-- New section for the three cards at the bottom of the page -->
+        <section class="info-cards-container">
+            <!-- Block 1: Date & Time and Music Player -->
+            <div class="info-card date-music-card">
+                <div class="date-time">
+                    <div id="date-display"></div>
+                    <div id="time-display"></div>
+                </div>
+                <div class="music-player">
+                    <h4 id="current-song-title">Music Player</h4>
+                    <audio id="audio-player" src=""></audio>
+                    <div class="player-controls">
+                        <button id="prev-btn"><i class="fas fa-backward"></i></button>
+                        <button id="play-pause-btn"><i class="fas fa-play"></i></button>
+                        <button id="next-btn"><i class="fas fa-forward"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Block 2: Current Weather -->
+            <div class="info-card weather-card">
+                <h4 class="weather-title">Current Weather</h4>
+                <div id="current-weather">
+                    <div class="current-weather-info">
+                        <span id="weather-icon" class="icon"><i class="fas fa-cloud"></i></span>
+                        <span id="weather-temp" class="temp">--°C</span>
+                        <span id="weather-desc" class="description">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Block 3: 3-day Forecast -->
+            <div class="info-card weather-card">
+                <div class="weather-forecasts-container">
+                    <h4 class="weather-title">Next 3 Days</h4>
+                    <div id="weather-forecasts" class="weather-days-row">
+                        <!-- Forecast items will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
+    
+    <script>
+        // --- Music Player Logic ---
+        const audioPlayer = document.getElementById('audio-player');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const currentSongTitle = document.getElementById('current-song-title');
+
+        // Updated songs array from the user's screenshot
+        const songs = [
+            { title: 'Brand New World', src: 'audio/01. Brand New World.mp3' },
+            { title: 'Past, Present, Future', src: 'audio/02. Past, Present, Future.mp3' },
+            { title: 'Hear The Magic', src: 'audio/03. Hear The Magic.mp3' },
+            { title: 'Healing Aura', src: 'audio/04. Healing Aura.mp3' },
+            { title: 'Word Quest', src: 'audio/05. Word Quest.mp3' }
+        ];
+
+        let currentSongIndex = 0;
+
+        function loadSong(index) {
+            audioPlayer.src = songs[index].src;
+            currentSongTitle.textContent = songs[index].title;
+            audioPlayer.load();
+        }
+
+        playPauseBtn.addEventListener('click', () => {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                audioPlayer.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            loadSong(currentSongIndex);
+            audioPlayer.play();
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            loadSong(currentSongIndex);
+            audioPlayer.play();
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        });
+
+        // Initialize with the first song
+        loadSong(currentSongIndex);
+
+        // --- Date & Time Logic ---
+        const dateDisplay = document.getElementById('date-display');
+        const timeDisplay = document.getElementById('time-display');
+
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            
+            dateDisplay.textContent = now.toLocaleDateString('en-US', dateOptions);
+            timeDisplay.textContent = now.toLocaleTimeString('en-US', timeOptions);
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime(); // Initial call to display immediately
+
+        // --- Weather Logic (using Google Search grounding) ---
+        const weatherTemp = document.getElementById('weather-temp');
+        const weatherDesc = document.getElementById('weather-desc');
+        const weatherIcon = document.getElementById('weather-icon');
+        const weatherForecastsDiv = document.getElementById('weather-forecasts');
+
+        function getWeatherIconClass(description) {
+            description = description.toLowerCase();
+            if (description.includes('sun') || description.includes('clear')) {
+                return 'fas fa-sun';
+            } else if (description.includes('cloud')) {
+                return 'fas fa-cloud';
+            } else if (description.includes('rain') || description.includes('drizzle')) {
+                return 'fas fa-cloud-showers-heavy';
+            } else if (description.includes('storm') || description.includes('thunder')) {
+                return 'fas fa-bolt';
+            } else if (description.includes('snow')) {
+                return 'fas fa-snowflake';
+            } else {
+                return 'fas fa-smog';
+            }
+        }
+        
+        async function fetchWeather() {
+            // Updated system prompt and user query to get a multi-day forecast
+            const systemPrompt = "You are a helpful assistant that provides a 4-day weather forecast based on grounded search results. Provide the forecast as a single string. For each day, include the day of the week, temperature in Celsius, and a brief, one or two-word description. Format the output as: Day 1: [Day], [Temp]°C, [Description] | Day 2: [Day], [Temp]°C, [Description] | Day 3: [Day], [Temp]°C, [Description] | Day 4: [Day], [Temp]°C, [Description]";
+            const userQuery = "4-day weather forecast for Hanoi, Vietnam, including temperature in Celsius and a brief, one or two-word description for each day.";
+            
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            try {
+                // Exponential backoff for retries
+                for (let i = 0; i < 3; i++) {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 429) {
+                        const delay = Math.pow(2, i) * 1000;
+                        console.warn(`API rate limit exceeded. Retrying in ${delay / 1000} seconds...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        continue;
+                    }
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+                    if (candidate && candidate.content?.parts?.[0]?.text) {
+                        const text = candidate.content.parts[0].text;
+                        const dailyForecasts = text.split('|').map(item => item.trim());
+                        
+                        // Clear previous forecasts
+                        weatherForecastsDiv.innerHTML = '';
+
+                        // Process current weather (Day 1)
+                        const currentForecast = dailyForecasts[0];
+                        if (currentForecast) {
+                            const parts = currentForecast.split(',');
+                            const temp = parts[1]?.trim() || '';
+                            const description = parts.slice(2).join(',').trim() || '';
+                            weatherTemp.textContent = temp;
+                            weatherDesc.textContent = description;
+                            weatherIcon.innerHTML = `<i class="${getWeatherIconClass(description)}"></i>`;
+                        }
+
+                        // Process next 3 days (Day 2 to 4)
+                        dailyForecasts.slice(1, 4).forEach((forecast) => {
+                            if (forecast) {
+                                const [dayInfo, tempInfo, ...descInfo] = forecast.split(',').map(s => s.trim());
+                                const day = dayInfo.split(':')[1].trim();
+                                const temp = tempInfo.trim();
+                                const description = descInfo.join(',').trim();
+
+                                const dayElement = document.createElement('div');
+                                dayElement.classList.add('weather-day');
+                                dayElement.innerHTML = `
+                                    <span>${day}</span>
+                                    <span class="weather-day-icon"><i class="${getWeatherIconClass(description)}"></i></span>
+                                    <span class="weather-day-temp">${temp}</span>
+                                `;
+                                weatherForecastsDiv.appendChild(dayElement);
+                            }
+                        });
+
+                        return; // Success, exit loop
+                    }
+                }
+                throw new Error("Failed to fetch weather data after multiple retries.");
+            } catch (error) {
+                console.error("Error fetching weather:", error);
+                weatherTemp.textContent = '--°C';
+                weatherDesc.textContent = 'Failed to load weather.';
+                weatherForecastsDiv.innerHTML = '';
+            }
+        }
+
+        fetchWeather();
+    </script>
 </body>
 </html>
