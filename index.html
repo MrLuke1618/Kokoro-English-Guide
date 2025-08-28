@@ -315,6 +315,22 @@
             margin-top: 0;
             margin-bottom: 1rem;
         }
+        
+        /* New CSS for the vertical weather forecast day layout */
+        #weather-forecasts {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            width: 100%;
+            gap: 1rem;
+        }
+        
+        .weather-day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -326,6 +342,8 @@
             <li class="dropdown">
                 <a href="#">Learning Hub <i class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
+                    <!-- Sorted Alphabetically -->
+                    <a href="game-8.html">Chat Game</a>
                     <a href="game-1.html">English Tenses</a>
                     <a href="game-2.html">Listening Practice</a>
                     <a href="game-3.html">Medical Terminology</a>
@@ -333,7 +351,6 @@
                     <a href="game-5.html">Sentence Building</a>
                     <a href="game-6.html">Speaking Practice</a>
                     <a href="game-7.html">Writing Game</a>
-                    <a href="game-8.html">Chat Game</a>
                 </div>
             </li>
             <li><a href="chatbot.html">Chat with a Friend</a></li>
@@ -350,7 +367,14 @@
         <!-- Main Content and Card Grid -->
         <section class="main-content">
             <div class="card-grid">
-                <!-- Cards based on the new layout -->
+                <!-- Cards based on the new layout, sorted alphabetically -->
+                <a href="game-8.html" class="card">
+                    <img src="images/icon-chatbot.png" alt="Chat Game" class="card-icon">
+                    <div class="card-text">
+                        <h3>Chat Game</h3>
+                        <p>Converse with an AI friend to practice conversational English.</p>
+                    </div>
+                </a>
                 <a href="game-1.html" class="card">
                     <img src="images/icon-tenses.png" alt="English Tenses" class="card-icon">
                     <div class="card-text">
@@ -398,13 +422,6 @@
                     <div class="card-text">
                         <h3>Writing Game</h3>
                         <p>Write enchanting letters to magical creatures.</p>
-                    </div>
-                </a>
-                <a href="game-8.html" class="card">
-                    <img src="images/icon-chatbot.png" alt="Chat Game" class="card-icon">
-                    <div class="card-text">
-                        <h3>Chat Game</h3>
-                        <p>Converse with an AI friend to practice conversational English.</p>
                     </div>
                 </a>
                 <a href="tutorial.html" class="card">
@@ -509,6 +526,11 @@
             playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         });
 
+        // Add event listener to automatically play the next song when the current one ends
+        audioPlayer.addEventListener('ended', () => {
+            nextBtn.click();
+        });
+
         // Initialize with the first song
         loadSong(currentSongIndex);
 
@@ -592,8 +614,8 @@
                     dayElement.classList.add('weather-day');
                     dayElement.innerHTML = `
                         <span>${dayOfWeek}</span>
+                        <span>${temp}°C</span>
                         <span class="weather-day-icon"><i class="${getWeatherIconClass(description)}"></i></span>
-                        <span class="weather-day-temp">${temp}°C</span>
                     `;
                     weatherForecastsDiv.appendChild(dayElement);
                 });
