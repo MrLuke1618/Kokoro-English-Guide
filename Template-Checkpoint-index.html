@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical English Guide</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&family=Sacramento&display=swap');
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-image: url('images/menu-bg.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #1a202c;
+        }
+
+        .text-brand {
+            font-family: 'Sacramento', cursive;
+        }
+
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+    <link rel="stylesheet" href="css/music-player.css">
+    <link rel="stylesheet" href="css/weather-widget.css">
+</head>
+<body class="min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-gray-900 bg-opacity-70 text-white p-4 flex items-center justify-between shadow-lg">
+        <a href="index.html" class="text-3xl text-yellow-300 text-brand font-bold">Magical English Guide</a>
+        <div class="flex items-center space-x-4 text-xs font-light">
+            <div id="date-time" class="p-2 rounded-lg bg-gray-800 bg-opacity-50">Thu, Aug 28, 2025<br>01:02 PM</div>
+            <div class="music-player-area flex items-center space-x-2">
+                <span class="text-sm">Now Playing: Hear The Magic</span>
+                <div class="flex space-x-1">
+                    <button class="text-gray-400 hover:text-white">⏮️</button>
+                    <button class="text-gray-400 hover:text-white">▶️</button>
+                    <button class="text-gray-400 hover:text-white">⏭️</button>
+                </div>
+            </div>
+            <div id="weather-widget" class="flex flex-col p-2 rounded-lg bg-gray-800 bg-opacity-50">
+                <div class="flex items-center space-x-1">
+                    <span class="font-bold">Thu</span>
+                    <img src="https://placehold.co/20x20/c0c0c0/000?text=S" alt="Sunny" class="w-5 h-5">
+                    <span>33°C</span>
+                </div>
+                <div class="flex space-x-2 text-gray-400">
+                    <span>Fri</span>
+                    <span>Sat</span>
+                    <span>Sun</span>
+                </div>
+                <div class="flex space-x-2 text-gray-400 text-xs">
+                    <span>30°C</span>
+                    <span>29°C</span>
+                    <span>29°C</span>
+                </div>
+            </div>
+        </div>
+        <ul class="flex items-center space-x-6 text-sm">
+            <li><a href="index.html" class="hover:text-yellow-300">Home</a></li>
+            <li class="relative group">
+                <a href="#" class="hover:text-yellow-300">Learning Hub <span class="text-xs">▼</span></a>
+            </li>
+            <li><a href="chatbot.html" class="hover:text-yellow-300">Chat with a Friend</a></li>
+        </ul>
+    </nav>
+    
+    <main class="container mx-auto px-4 py-16 flex flex-col items-center">
+        <!-- Hero Text -->
+        <div class="text-center mb-16 max-w-2xl mx-auto">
+            <h1 class="text-5xl font-extrabold mb-4 text-white drop-shadow-md">Welcome, Kokoro</h1>
+            <p class="text-lg font-medium text-black drop-shadow-sm">Your magical guide to learning English starts here. Explore a world of new words and phrases made just for you.</p>
+        </div>
+
+        <!-- Cards Container -->
+        <div class="w-full flex flex-col items-center space-y-8">
+            <!-- First Row: Your Magical Guide -->
+            <div class="w-full flex justify-center">
+                <a href="tutorial.html" class="block p-6 glass-card text-center transition-all duration-300 transform hover:scale-105 w-full md:w-1/2 lg:w-1/3">
+                    <div class="flex flex-col items-center">
+                        <img src="https://placehold.co/80x80/64748B/fff?text=Guide" alt="Magical Guide" class="w-20 h-20 mb-4 rounded-full shadow-lg" onerror="this.src='https://placehold.co/80x80/64748B/fff?text=Guide';">
+                        <h2 class="text-2xl font-bold mb-2">Your Magical Guide</h2>
+                        <p class="text-sm text-gray-600">Learn how to use this guide to become an English master!</p>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Second Row: 4 mini-game cards -->
+            <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <a href="game-1.html" class="block p-6 glass-card text-center transition-all duration-300 transform hover:scale-105">
+                    <div class="flex flex-col items-center">
+                        <img src="https://placehold.co/80x80/64748B/fff?text=Tenses" alt="English Tenses" class="w-20 h-20 mb-4 rounded-full shadow-lg" onerror="this.src='https://placehold.co/80x80/64748B/fff?text=Tenses';">
+                        <h2 class="text-2xl font-bold mb-2">English Tenses</h2>
+                        <p class="text-sm text-gray-600">Learn the grammar that matters most.</p>
+                    </div>
+                </a>
+                <a href="game-2.html" class="block p-6 glass-card text-center transition-all duration-300 transform hover:scale-105">
+                    <div class="flex flex-col items-center">
+                        <img src="https://placehold.co/80x80/64748B/fff?text=Listen" alt="Listening Practice" class="w-20 h-20 mb-4 rounded-full shadow-lg" onerror="this.src='https://placehold.co/80x80/64748B/fff?text=Listen';">
+                        <h2 class="text-2xl font-bold mb-2">Listening Practice</h2>
+                        <p class="text-sm text-gray-600">Train your ear to understand spoken English when people talk.</p>
+                    </div>
+                </a>
+                <a href="game-3.html" class="block p-6 glass-card text-center transition-all duration-300 transform hover:scale-105">
+                    <div class="flex flex-col items-center">
+                        <img src="https://placehold.co/80x80/64748B/fff?text=Medical" alt="Medical Terminology" class="w-20 h-20 mb-4 rounded-full shadow-lg" onerror="this.src='https://placehold.co/80x80/64748B/fff?text=Medical';">
+                        <h2 class="text-2xl font-bold mb-2">Medical Terminology</h2>
+                        <p class="text-sm text-gray-600">Essential phrases for your career as a nurse.</p>
+                    </div>
+                </a>
+                <a href="game-4.html" class="block p-6 glass-card text-center transition-all duration-300 transform hover:scale-105">
+                    <div class="flex flex-col items-center">
+                        <img src="https://placehold.co/80x80/64748B/fff?text=Reading" alt="Reading Practice" class="w-20 h-20 mb-4 rounded-full shadow-lg" onerror="this.src='https://placehold.co/80x80/64748B/fff?text=Reading';">
+                        <h2 class="text-2xl font-bold mb-2">Reading Practice</h2>
+                        <p class="text-sm text-gray-600">Read magical stories and improve your comprehension.</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Third Row: 4 mini-game cards -->
+            <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <a href="game-5.html" class="block p-6 glass-card text-center transition-all duration-300 transform hover:scale-105">
+                    <div class="flex flex-col items-center">
+                        <img src="https://placehold.co/80x80/64748B/fff?text=Sentence" alt="Sentence Building" class="w-20 h-20 mb-4 rounded-full shadow-lg" onerror="this.src='https://placehold.co/80x80/64748B/fff?text=Sentence';">
+                        <h2 class="text-2xl font-bold mb-2">Sentence Building</h2>
+                        <p class="text-sm text-gray-600">Put words together to make perfect sentences.</p>
+                    </div>
+                </a>
+                <a href="game-6.html" class="block p-6 glass-card text-center transition-all duration-300 transform hover:scale-105">
+                    <div class="flex flex-col items-center">
+                        <img src="https://placehold.co/80x80/64748B/fff?text=Speak" alt="Speaking Practice" class="w-20 h-20 mb-4 rounded-full shadow-lg" onerror="this.src='https://placehold.co/80x80/64748B/fff?text=Speak';">
+                        <h2 class="text-2xl font-bold mb-2">Speaking Practice</h2>
+                        <p class="text-sm text-gray-600">Talk with a friendly spirit to practice your skills.</p>
+                    </div>
+                </a>
+                <a href="game-7.html" class="block p-6 glass-card text-center transition-all duration-300 transform hover:scale-105">
+                    <div class="flex flex-col items-center">
+                        <img src="https://placehold.co/80x80/64748B/fff?text=Writing" alt="Writing Game" class="w-20 h-20 mb-4 rounded-full shadow-lg" onerror="this.src='https://placehold.co/80x80/64748B/fff?text=Writing';">
+                        <h2 class="text-2xl font-bold mb-2">Writing Game</h2>
+                        <p class="text-sm text-gray-600">Write enchanting letters to magical creatures.</p>
+                    </div>
+                </a>
+                <a href="game-8.html" class="block p-6 glass-card text-center transition-all duration-300 transform hover:scale-105">
+                    <div class="flex flex-col items-center">
+                        <img src="https://placehold.co/80x80/64748B/fff?text=Chat" alt="Chat Game" class="w-20 h-20 mb-4 rounded-full shadow-lg" onerror="this.src='https://placehold.co/80x80/64748B/fff?text=Chat';">
+                        <h2 class="text-2xl font-bold mb-2">Chat Game</h2>
+                        <p class="text-sm text-gray-600">Converse with an AI friend to practice conversational English.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Placeholder for JavaScript files to make it runnable -->
+    <script src="js/music-player.js"></script>
+    <script src="js/weather-widget.js"></script>
+    <script src="js/date-time.js"></script>
+
+</body>
+</html>

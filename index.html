@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical English Guide</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&family=Sacramento&display=swap">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0d0d0d;
+            color: #f0f0f0;
+            line-height: 1.6;
+            background-image: url('images/menu-bg.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 2rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            font-family: 'Sacramento', cursive;
+            font-size: 2rem;
+            color: #ffd700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-links li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links li a:hover {
+            color: #ffd700;
+        }
+
+        .main-header {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .main-header h1 {
+            font-size: 3rem;
+            color: #fff;
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+        }
+
+        .main-header p {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-top: 0.5rem;
+        }
+        
+        .main-content {
+            padding: 2rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .card {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            text-decoration: none;
+            color: #f0f0f0;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            border: 2px solid transparent; /* Initial transparent border */
+            position: relative;
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            border-radius: 50%;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            color: #fff;
+            margin-top: 0;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">Magical English Guide</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">Learning Hub</a></li>
+            <li><a href="chatbot.html">Chat with a Friend</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <!-- Main Header -->
+        <header class="main-header">
+            <h1>Welcome, Kokoro</h1>
+            <p>Your journey to learning English starts here. Explore a world of new words and phrases made just for you.</p>
+        </header>
+
+        <!-- Main Content and Card Grid -->
+        <section class="main-content">
+            <div class="card-grid">
+                <!-- Cards based on the screenshot -->
+                <a href="game-1.html" class="card">
+                    <img src="images/icon-tenses.png" alt="English Tenses" class="card-icon">
+                    <h3>English Tenses</h3>
+                    <p>Learn the grammar that matters most.</p>
+                </a>
+                <a href="game-2.html" class="card">
+                    <img src="images/icon-listening.png" alt="Listening Practice" class="card-icon">
+                    <h3>Listening Practice</h3>
+                    <p>Train your ear to understand spoken English.</p>
+                </a>
+                <a href="game-3.html" class="card">
+                    <img src="images/icon-medical.png" alt="Medical Terminology" class="card-icon">
+                    <h3>Medical Terminology</h3>
+                    <p>Essential phrases for your career as a nurse.</p>
+                </a>
+                <a href="game-4.html" class="card">
+                    <img src="images/icon-reading.png" alt="Reading Practice" class="card-icon">
+                    <h3>Reading Practice</h3>
+                    <p>Read magical stories and improve your comprehension.</p>
+                </a>
+                <a href="game-5.html" class="card">
+                    <img src="images/icon-sentences.png" alt="Sentence Building" class="card-icon">
+                    <h3>Sentence Building</h3>
+                    <p>Put words together to make perfect sentences.</p>
+                </a>
+                <a href="game-6.html" class="card">
+                    <img src="images/icon-speaking.png" alt="Speaking Practice" class="card-icon">
+                    <h3>Speaking Practice</h3>
+                    <p>Talk with a friendly spirit to practice your skills.</p>
+                </a>
+                <a href="game-7.html" class="card">
+                    <img src="images/icon-writing.png" alt="Writing Game" class="card-icon">
+                    <h3>Writing Game</h3>
+                    <p>Write enchanting letters to magical creatures.</p>
+                </a>
+                <a href="game-8.html" class="card">
+                    <img src="images/icon-chatbot.png" alt="Chat Game" class="card-icon">
+                    <h3>Chat Game</h3>
+                    <p>Converse with an AI friend to practice conversational English.</p>
+                </a>
+                <a href="tutorial.html" class="card">
+                    <img src="images/icon-guide.png" alt="Magical Guide" class="card-icon">
+                    <h3>Your Magical Guide</h3>
+                    <p>Learn how to use this guide to become an English master!</p>
+                </a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# Ignore local development files
+.DS_Store
+.vscode/
+
+# Ignore personal API keys and local settings
+js/weather-widget.js
+
+# We will create a new example file for others to use
+!js/weather-widget-example.js
