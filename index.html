@@ -51,6 +51,7 @@
             margin: 0;
             padding: 0;
             gap: 2rem;
+            position: relative;
         }
 
         .nav-links li a {
@@ -63,6 +64,44 @@
 
         .nav-links li a:hover {
             color: #ffd700;
+        }
+
+        /* Dropdown menu for Learning Hub */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            top: 100%; /* Position below the main link */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffd700;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
 
         .main-header {
@@ -79,7 +118,7 @@
 
         .main-header p {
             font-size: 1.2rem;
-            color: #ccc;
+            color: black; /* Changed to black as requested */
             margin-top: 0.5rem;
         }
         
@@ -284,7 +323,19 @@
         <a href="index.html" class="nav-brand">Magical English Guide</a>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
-            <li><a href="#">Learning Hub</a></li>
+            <li class="dropdown">
+                <a href="#">Learning Hub <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="game-1.html">English Tenses</a>
+                    <a href="game-2.html">Listening Practice</a>
+                    <a href="game-3.html">Medical Terminology</a>
+                    <a href="game-4.html">Reading Practice</a>
+                    <a href="game-5.html">Sentence Building</a>
+                    <a href="game-6.html">Speaking Practice</a>
+                    <a href="game-7.html">Writing Game</a>
+                    <a href="game-8.html">Chat Game</a>
+                </div>
+            </li>
             <li><a href="chatbot.html">Chat with a Friend</a></li>
         </ul>
     </nav>
@@ -477,7 +528,7 @@
         setInterval(updateDateTime, 1000);
         updateDateTime(); // Initial call to display immediately
 
-        // --- Weather Logic (using Google Search grounding) ---
+        // --- Weather Logic (using WeatherAPI.com) ---
         const weatherTemp = document.getElementById('weather-temp');
         const weatherDesc = document.getElementById('weather-desc');
         const weatherIcon = document.getElementById('weather-icon');
@@ -487,13 +538,13 @@
             description = description.toLowerCase();
             if (description.includes('sun') || description.includes('clear')) {
                 return 'fas fa-sun';
-            } else if (description.includes('cloud')) {
+            } else if (description.includes('cloud') || description.includes('overcast')) {
                 return 'fas fa-cloud';
             } else if (description.includes('rain') || description.includes('drizzle')) {
                 return 'fas fa-cloud-showers-heavy';
             } else if (description.includes('storm') || description.includes('thunder')) {
                 return 'fas fa-bolt';
-            } else if (description.includes('snow')) {
+            } else if (description.includes('snow') || description.includes('ice')) {
                 return 'fas fa-snowflake';
             } else {
                 return 'fas fa-smog';
@@ -501,83 +552,52 @@
         }
         
         async function fetchWeather() {
-            // Updated system prompt and user query to get a multi-day forecast
-            const systemPrompt = "You are a helpful assistant that provides a 4-day weather forecast based on grounded search results. Provide the forecast as a single string. For each day, include the day of the week, temperature in Celsius, and a brief, one or two-word description. Format the output as: Day 1: [Day], [Temp]°C, [Description] | Day 2: [Day], [Temp]°C, [Description] | Day 3: [Day], [Temp]°C, [Description] | Day 4: [Day], [Temp]°C, [Description]";
-            const userQuery = "4-day weather forecast for Hanoi, Vietnam, including temperature in Celsius and a brief, one or two-word description for each day.";
-            
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                tools: [{ "google_search": {} }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                }
-            };
+            // Your WeatherAPI.com key is required here.
+            // IMPORTANT: The API key must be a string, enclosed in quotes.
+            const apiKey = '2d03f2fd77a64b9784f24803252808'; 
+            if (apiKey === 'YOUR_API_KEY') {
+                console.error("Error: Please replace 'YOUR_API_KEY' with a valid WeatherAPI.com key.");
+                weatherTemp.textContent = '--°C';
+                weatherDesc.textContent = 'API Key Missing';
+                weatherForecastsDiv.innerHTML = '';
+                return;
+            }
+            const location = 'Hanoi';
+            const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=4`;
 
             try {
-                // Exponential backoff for retries
-                for (let i = 0; i < 3; i++) {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.status === 429) {
-                        const delay = Math.pow(2, i) * 1000;
-                        console.warn(`API rate limit exceeded. Retrying in ${delay / 1000} seconds...`);
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        continue;
-                    }
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const result = await response.json();
-                    const candidate = result.candidates?.[0];
-                    if (candidate && candidate.content?.parts?.[0]?.text) {
-                        const text = candidate.content.parts[0].text;
-                        const dailyForecasts = text.split('|').map(item => item.trim());
-                        
-                        // Clear previous forecasts
-                        weatherForecastsDiv.innerHTML = '';
-
-                        // Process current weather (Day 1)
-                        const currentForecast = dailyForecasts[0];
-                        if (currentForecast) {
-                            const parts = currentForecast.split(',');
-                            const temp = parts[1]?.trim() || '';
-                            const description = parts.slice(2).join(',').trim() || '';
-                            weatherTemp.textContent = temp;
-                            weatherDesc.textContent = description;
-                            weatherIcon.innerHTML = `<i class="${getWeatherIconClass(description)}"></i>`;
-                        }
-
-                        // Process next 3 days (Day 2 to 4)
-                        dailyForecasts.slice(1, 4).forEach((forecast) => {
-                            if (forecast) {
-                                const [dayInfo, tempInfo, ...descInfo] = forecast.split(',').map(s => s.trim());
-                                const day = dayInfo.split(':')[1].trim();
-                                const temp = tempInfo.trim();
-                                const description = descInfo.join(',').trim();
-
-                                const dayElement = document.createElement('div');
-                                dayElement.classList.add('weather-day');
-                                dayElement.innerHTML = `
-                                    <span>${day}</span>
-                                    <span class="weather-day-icon"><i class="${getWeatherIconClass(description)}"></i></span>
-                                    <span class="weather-day-temp">${temp}</span>
-                                `;
-                                weatherForecastsDiv.appendChild(dayElement);
-                            }
-                        });
-
-                        return; // Success, exit loop
-                    }
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                throw new Error("Failed to fetch weather data after multiple retries.");
+                const data = await response.json();
+
+                // Process current weather
+                const current = data.current;
+                weatherTemp.textContent = `${current.temp_c}°C`;
+                weatherDesc.textContent = current.condition.text;
+                weatherIcon.innerHTML = `<i class="${getWeatherIconClass(current.condition.text)}"></i>`;
+
+                // Process next 3 days' forecast
+                const forecastDays = data.forecast.forecastday.slice(1, 4);
+                weatherForecastsDiv.innerHTML = ''; // Clear previous forecasts
+
+                forecastDays.forEach(day => {
+                    const date = new Date(day.date);
+                    const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' });
+                    const temp = day.day.avgtemp_c;
+                    const description = day.day.condition.text;
+
+                    const dayElement = document.createElement('div');
+                    dayElement.classList.add('weather-day');
+                    dayElement.innerHTML = `
+                        <span>${dayOfWeek}</span>
+                        <span class="weather-day-icon"><i class="${getWeatherIconClass(description)}"></i></span>
+                        <span class="weather-day-temp">${temp}°C</span>
+                    `;
+                    weatherForecastsDiv.appendChild(dayElement);
+                });
+
             } catch (error) {
                 console.error("Error fetching weather:", error);
                 weatherTemp.textContent = '--°C';
