@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical English Guide - Dynamic Listening Practice</title>
+    <!-- Fonts and Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&family=Sacramento&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Color palette and font styles */
+        :root {
+            --primary-color: #ffd700; /* Gold color for accents */
+            --dark-background: #1a1a1a; /* Dark background */
+            --card-background: #0d0d0d; /* Slightly darker black for the card */
+            --text-color: #f0f0f0; /* Off-white for general text */
+            --medium-gray: #444; /* For secondary text/borders */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-background);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-image: url('images/listening-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 5rem;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background-color: var(--card-background);
+            color: var(--text-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .nav-brand {
+            font-family: 'Sacramento', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .nav-links li a:hover {
+            color: var(--primary-color);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--card-background);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+            z-index: 1;
+            border-radius: 8px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #333;
+            border-radius: 8px;
+        }
+
+        .game-container {
+            text-align: center;
+            background-color: var(--card-background);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            max-width: 700px;
+            width: 90%;
+            margin: 4rem 0 2rem;
+            position: relative;
+        }
+
+        .header-top-bar {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stats-box {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            gap: 20px;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .game-header {
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .game-header h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .game-header p {
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-top: 0.5rem;
+            white-space: pre-line;
+        }
+
+        .speaker-box {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            min-height: 25px; /* Prevents layout shift */
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .game-buttons-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .game-button {
+            background: var(--primary-color);
+            color: black;
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-button:hover:not(:disabled) {
+            background: #e6b800;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-button:disabled {
+            background: var(--medium-gray);
+            color: #999;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 0.75rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            background-color: #222;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #e6b800;
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        .feedback-message {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            font-weight: bold;
+            min-height: 25px;
+        }
+
+        .correct {
+            color: #4CAF50;
+        }
+
+        .incorrect {
+            color: #f44336;
+        }
+
+        .hint-box {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            background-color: #333;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--primary-color);
+            min-height: 25px;
+        }
+
+        .dialog-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .dialog-box {
+            background: var(--card-background);
+            color: var(--text-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .dialog-box h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .dialog-box p {
+            text-align: left;
+            white-space: pre-wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .dialog-box button {
+            background: var(--primary-color);
+            color: black;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+
+        .speed-control {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .speed-control label {
+            font-weight: bold;
+        }
+
+        .speed-control input[type="range"] {
+            width: 150px;
+            -webkit-appearance: none;
+            height: 8px;
+            background: #555;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .speed-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border: 2px solid black;
+            border-radius: 50%;
+        }
+
+        .speed-control input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border: 2px solid black;
+            border-radius: 50%;
+        }
+
+        #conversation-select {
+            background-color: var(--medium-gray);
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .loading-spinner {
+            border: 4px solid var(--medium-gray);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">Magical English Guide</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#">Learning Hub <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="#">English Tenses</a>
+                    <a href="#">Interactive Stories</a>
+                    <a href="#">Listening Practice</a>
+                    <a href="#">Medical Terminology</a>
+                    <a href="#">Reading Practice</a>
+                    <a href="#">Sentence Building</a>
+                    <a href="#">Speaking Practice</a>
+                    <a href="#">Writing Game</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    
+    <main>
+        <div class="game-container">
+            <div class="header-top-bar">
+                <div class="stats-box">
+                    <span id="score-display">Score: 0</span>
+                    <span id="progress-display"></span>
+                </div>
+            </div>
+            
+            <header class="game-header">
+                <h1>🎧 Listening Practice</h1>
+                <p>Listen carefully and type what you hear.<br>Choose a conversation type below to begin.</p>
+            </header>
+            
+            <div class="controls">
+                <select id="conversation-select">
+                    <option value="academic_discussion">Academic Discussion</option>
+                    <option value="business_english">Business English</option>
+                    <option value="daily_conversation">Daily Conversation</option>
+                    <option value="english_test_conversation">English Test Conversation</option>
+                    <option value="food_and_dining">Food and Dining</option>
+                    <option value="job_interview">Job Interview</option>
+                    <option value="medical_conversation">Medical Conversation</option>
+                    <option value="social_media">Social Media</option>
+                    <option value="small_talk">Small Talk</option>
+                    <option value="technology">Technology</option>
+                    <option value="travel_conversation">Travel</option>
+                </select>
+                <div class="speed-control">
+                    <label for="speed-slider">Speed:</label>
+                    <input type="range" id="speed-slider" min="0.5" max="1.5" step="0.1" value="1.0">
+                    <span id="speed-value">1.0x</span>
+                </div>
+                <button id="start-btn" class="game-button"><i class="fas fa-play"></i> Start Conversation</button>
+                <div class="loading-spinner" id="loading-spinner"></div>
+                <button id="new-conversation-btn" class="game-button" disabled><i class="fas fa-sync-alt"></i> New Conversation</button>
+
+                <div class="speaker-box" id="speaker-display"></div>
+                <div class="game-buttons-row">
+                    <button id="play-btn" class="game-button" disabled><i class="fas fa-volume-up"></i> Listen</button>
+                    <button id="hint-btn" class="game-button" disabled><i class="fas fa-lightbulb"></i> Hint</button>
+                </div>
+                <div class="game-buttons-row">
+                    <button id="check-btn" class="game-button" disabled><i class="fas fa-check"></i> Check Answer</button>
+                    <button id="next-btn" class="game-button" disabled><i class="fas fa-forward"></i> Next Turn</button>
+                </div>
+                <div class="game-buttons-row">
+                    <button id="transcript-btn" class="game-button" disabled><i class="fas fa-file-alt"></i> Show Transcript</button>
+                </div>
+                <input type="text" id="answer-input" placeholder="Type the sentence here..." disabled>
+            </div>
+            
+            <div id="feedback" class="feedback-message"></div>
+            <div id="hint-box" class="hint-box"></div>
+        </div>
+    </main>
+
+    <!-- Modal for Transcript -->
+    <div id="transcript-dialog" class="dialog-container">
+        <div class="dialog-box">
+            <h2 id="transcript-title"></h2>
+            <p id="transcript-text"></p>
+            <button id="close-transcript-btn">Close</button>
+        </div>
+    </div>
+    
+    <script>
+        // Corrected API key from your previous conversation.
+        const API_KEY = "AIzaSyDmKfMMah0cBthsv5YpqxfVP0rV8te-wE4";
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+        const TTS_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${API_KEY}`;
+        
+        let currentConversation = [];
+        let currentTurnIndex = 0;
+        let hintRevealedWords = 0;
+        let score = 0;
+        let audio = null;
+        
+        // --- DOM Elements ---
+        const startBtn = document.getElementById('start-btn');
+        const newConversationBtn = document.getElementById('new-conversation-btn');
+        const playBtn = document.getElementById('play-btn');
+        const checkBtn = document.getElementById('check-btn');
+        const hintBtn = document.getElementById('hint-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const answerInput = document.getElementById('answer-input');
+        const feedbackDiv = document.getElementById('feedback');
+        const hintBox = document.getElementById('hint-box');
+        const scoreDisplay = document.getElementById('score-display');
+        const progressDisplay = document.getElementById('progress-display');
+        const conversationSelect = document.getElementById('conversation-select');
+        const speakerDisplay = document.getElementById('speaker-display');
+        const transcriptBtn = document.getElementById('transcript-btn');
+        const transcriptDialog = document.getElementById('transcript-dialog');
+        const transcriptText = document.getElementById('transcript-text');
+        const closeTranscriptBtn = document.getElementById('close-transcript-btn');
+        const speedSlider = document.getElementById('speed-slider');
+        const speedValueDisplay = document.getElementById('speed-value');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        // --- Helper Functions ---
+        async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) {
+                        return response;
+                    }
+                    if (response.status === 429) {
+                        const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                        console.warn(`Rate limit exceeded. Retrying in ${delay}ms...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        continue;
+                    }
+                    // For a 401 error, we stop retrying as it indicates an invalid key
+                    if (response.status === 401) {
+                        throw new Error(`API key is invalid. Please check your key.`);
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    if (error.message.includes('API key is invalid')) {
+                        throw error;
+                    }
+                    if (i === maxRetries - 1) {
+                         throw new Error('Max retries exceeded.');
+                    }
+                }
+            }
+        }
+
+        // Function to clean the JSON response text by removing markdown code blocks
+        function cleanJsonResponse(text) {
+            const jsonStart = text.indexOf('[');
+            const jsonEnd = text.lastIndexOf(']');
+            if (jsonStart !== -1 && jsonEnd !== -1) {
+                return text.substring(jsonStart, jsonEnd + 1);
+            }
+            return text;
+        }
+        
+        // Function to hide the transcript dialog
+        function hideTranscript() {
+            transcriptDialog.style.display = 'none';
+        }
+
+        // Function to convert PCM audio data to a WAV Blob
+        function pcmToWav(pcmData, sampleRate) {
+            const pcm16 = new Int16Array(pcmData);
+            const dataLength = pcm16.length * 2;
+            const buffer = new ArrayBuffer(44 + dataLength);
+            const view = new DataView(buffer);
+            let offset = 0;
+
+            function writeString(str) {
+                for (let i = 0; i < str.length; i++) {
+                    view.setUint8(offset++, str.charCodeAt(i));
+                }
+            }
+
+            function writeUint32(val) {
+                view.setUint32(offset, val, true);
+                offset += 4;
+            }
+
+            function writeUint16(val) {
+                view.setUint16(offset, val, true);
+                offset += 2;
+            }
+
+            // RIFF chunk descriptor
+            writeString('RIFF');
+            writeUint32(36 + dataLength); // file size - 8
+            writeString('WAVE');
+
+            // fmt chunk
+            writeString('fmt ');
+            writeUint32(16); // subchunk1 size
+            writeUint16(1); // PCM audio format
+            writeUint16(1); // mono
+            writeUint32(sampleRate);
+            writeUint32(sampleRate * 2); // byte rate
+            writeUint16(2); // block align
+            writeUint16(16); // bits per sample
+
+            // data chunk
+            writeString('data');
+            writeUint32(dataLength);
+            
+            for (let i = 0; i < pcm16.length; i++) {
+                view.setInt16(offset, pcm16[i], true);
+                offset += 2;
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        // --- Core Functions ---
+        async function generateConversation() {
+            setLoading(true);
+            resetGame();
+            hideTranscript();
+            
+            const conversationType = conversationSelect.value.replace(/_/g, ' ');
+            const prompt = `Generate a 5-turn English conversation for listening practice. The topic should be "${conversationType}". The conversation should be between two speakers. For each turn, provide the speaker name and the sentence. The speakers should have natural names like 'Joe' and 'Jane' for the first two speakers, 'Mark' and 'Emily' for business, 'Sarah' and 'Tom' for daily conversation, 'Man' and 'Woman' for test conversations, 'Nurse' and 'Patient' and 'Doctor' for medical, 'Agent' and 'Passenger' for travel, and 'Professor' and 'Student' for academic discussions. Ensure the sentences are concise and clear for listening practice. Return the response as a JSON array of objects with 'speaker' and 'text' properties.`;
+            
+            const payload = {
+                contents: [{
+                    parts: [{ text: prompt }]
+                }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                "speaker": { "type": "STRING" },
+                                "text": { "type": "STRING" },
+                            }
+                        }
+                    }
+                }
+            };
+
+            try {
+                const response = await fetchWithExponentialBackoff(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('API response was not ok.');
+                }
+
+                const result = await response.json();
+                
+                // Add a check to ensure the response structure is as expected
+                if (!result.candidates || !result.candidates[0] || !result.candidates[0].content || !result.candidates[0].content.parts || !result.candidates[0].content.parts[0]) {
+                    throw new Error('Invalid API response structure.');
+                }
+
+                const rawText = result.candidates[0].content.parts[0].text;
+                const cleanedText = cleanJsonResponse(rawText);
+                const conversationText = JSON.parse(cleanedText);
+                
+                currentConversation = conversationText.map((turn, index) => ({
+                    ...turn
+                }));
+
+                setLoading(false);
+                startConversation();
+
+            } catch (error) {
+                console.error("Failed to generate conversation:", error);
+                feedbackDiv.textContent = "Failed to generate conversation. Please check your API key or try again later.";
+                feedbackDiv.className = 'feedback-message incorrect';
+                setLoading(false);
+                resetGame();
+            }
+        }
+        
+        async function playTurn() {
+            const currentTurn = currentConversation[currentTurnIndex];
+            if (!currentTurn) return;
+
+            // Use the TTS API to get the audio
+            const payload = {
+                contents: [{
+                    parts: [{ text: currentTurn.text }]
+                }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: "Puck" }
+                        }
+                    }
+                },
+            };
+            
+            playBtn.disabled = true;
+            feedbackDiv.textContent = "Generating audio...";
+
+            try {
+                const response = await fetchWithExponentialBackoff(TTS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error('TTS API response was not ok.');
+                }
+                
+                const result = await response.json();
+                const audioData = result?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+                const mimeType = result?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.mimeType;
+                
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 16000;
+                    const pcmData = base64ToArrayBuffer(audioData);
+                    const pcm16 = new Int16Array(pcmData);
+                    const wavBlob = pcmToWav(pcm16, sampleRate);
+                    const audioUrl = URL.createObjectURL(wavBlob);
+                    
+                    if (audio) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                    audio = new Audio(audioUrl);
+                    audio.playbackRate = speedSlider.value;
+                    audio.play();
+                    
+                    audio.onended = () => {
+                        playBtn.disabled = false;
+                        feedbackDiv.textContent = "Listen again or type your answer and click 'Check Answer'.";
+                    };
+
+                } else {
+                    throw new Error("Invalid audio data from TTS API.");
+                }
+
+            } catch (error) {
+                console.error("Failed to play turn:", error);
+                feedbackDiv.textContent = "Failed to play audio. Please try again.";
+                feedbackDiv.className = 'feedback-message incorrect';
+                playBtn.disabled = false;
+            }
+        }
+        
+        function startConversation() {
+            currentTurnIndex = 0;
+            score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
+            
+            playBtn.disabled = false;
+            checkBtn.disabled = false;
+            hintBtn.disabled = false;
+            nextBtn.disabled = false;
+            answerInput.disabled = false;
+            transcriptBtn.disabled = false;
+            newConversationBtn.disabled = false;
+            
+            loadTurn();
+        }
+
+        function loadTurn() {
+            if (currentTurnIndex < currentConversation.length) {
+                const currentTurn = currentConversation[currentTurnIndex];
+                
+                speakerDisplay.textContent = `Speaker: ${currentTurn.speaker}`;
+                answerInput.value = '';
+                feedbackDiv.textContent = '';
+                hintBox.textContent = '';
+                hintRevealedWords = 0;
+                
+                progressDisplay.textContent = `Turn ${currentTurnIndex + 1} of ${currentConversation.length}`;
+                
+                // Reset button states
+                checkBtn.disabled = false;
+                hintBtn.disabled = false;
+                playBtn.disabled = false;
+                
+                answerInput.focus();
+            } else {
+                speakerDisplay.textContent = '';
+                progressDisplay.textContent = ``;
+                feedbackDiv.textContent = `You've completed the conversation! 🎉 Click 'New Conversation' to generate another one.`;
+                feedbackDiv.className = 'feedback-message correct';
+                
+                // Disable controls
+                playBtn.disabled = true;
+                checkBtn.disabled = true;
+                hintBtn.disabled = true;
+                nextBtn.disabled = true;
+                answerInput.disabled = true;
+                transcriptBtn.disabled = true;
+                newConversationBtn.disabled = false;
+            }
+        }
+        
+        function checkAnswer() {
+            const currentTurn = currentConversation[currentTurnIndex];
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            const correctAnswer = currentTurn.text.trim().toLowerCase();
+            
+            if (userAnswer === correctAnswer) {
+                feedbackDiv.textContent = "Amazing! You got it right! ✨ Click 'Next Turn' to continue.";
+                feedbackDiv.className = 'feedback-message correct';
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+                checkBtn.disabled = true;
+                hintBtn.disabled = true;
+                answerInput.disabled = true;
+            } else {
+                feedbackDiv.textContent = "Not quite right. Try again or use a hint!";
+                feedbackDiv.className = 'feedback-message incorrect';
+            }
+        }
+        
+        function giveHint() {
+            const currentTurn = currentConversation[currentTurnIndex];
+            const words = currentTurn.text.split(' ');
+            if (hintRevealedWords < words.length) {
+                let hintText = hintBox.textContent;
+                if (hintText) {
+                    hintText += ' ';
+                }
+                hintText += words[hintRevealedWords];
+                hintBox.textContent = hintText;
+                hintRevealedWords++;
+            }
+        }
+        
+        function showTranscript() {
+            const fullTranscript = currentConversation.map(turn => `${turn.speaker}: ${turn.text}`).join('\n');
+            transcriptText.textContent = fullTranscript;
+            transcriptDialog.style.display = 'flex';
+        }
+
+        function setLoading(isLoading) {
+            startBtn.disabled = isLoading;
+            newConversationBtn.disabled = isLoading;
+            loadingSpinner.style.display = isLoading ? 'block' : 'none';
+        }
+
+        function resetGame() {
+            currentConversation = [];
+            currentTurnIndex = 0;
+            score = 0;
+            scoreDisplay.textContent = 'Score: 0';
+            progressDisplay.textContent = '';
+            speakerDisplay.textContent = '';
+            answerInput.value = '';
+            feedbackDiv.textContent = '';
+            hintBox.textContent = '';
+            
+            playBtn.disabled = true;
+            checkBtn.disabled = true;
+            hintBtn.disabled = true;
+            nextBtn.disabled = true;
+            answerInput.disabled = true;
+            transcriptBtn.disabled = true;
+            newConversationBtn.disabled = true;
+        }
+
+        // --- Event Listeners ---
+        startBtn.addEventListener('click', generateConversation);
+        newConversationBtn.addEventListener('click', generateConversation);
+        playBtn.addEventListener('click', playTurn);
+        checkBtn.addEventListener('click', checkAnswer);
+        hintBtn.addEventListener('click', giveHint);
+        nextBtn.addEventListener('click', () => {
+            currentTurnIndex++;
+            loadTurn();
+        });
+        transcriptBtn.addEventListener('click', showTranscript);
+        closeTranscriptBtn.addEventListener('click', () => {
+            transcriptDialog.style.display = 'none';
+        });
+
+        speedSlider.addEventListener('input', () => {
+            speedValueDisplay.textContent = `${speedSlider.value}x`;
+            if (audio) {
+                audio.playbackRate = speedSlider.value;
+            }
+        });
+
+        // Initial setup on page load
+        window.onload = () => {
+            startBtn.disabled = false;
+        };
+    </script>
+</body>
+</html>

@@ -117,9 +117,10 @@
         }
 
         .main-header p {
-            font-size: 1.2rem;
-            color: black; /* Changed to black as requested */
+            font-size: 1.3rem; /* Increased size for better visibility */
+            color: #fff; /* Changed color to white for better visibility */
             margin-top: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Added text shadow for outline effect */
         }
         
         .main-content {
@@ -303,11 +304,11 @@
         
         /* Font sizes for forecast */
         .weather-day span {
-            font-size: 1.1rem;
+            font-size: 1.4rem; /* Increased font size */
         }
         
         .weather-day-icon {
-            font-size: 2.5rem;
+            font-size: 3rem; /* Increased icon size */
         }
         
         h4.weather-title {
@@ -334,7 +335,6 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <a href="index.html" class="nav-brand">Magical English Guide</a>
         <ul class="nav-links">
@@ -342,39 +342,27 @@
             <li class="dropdown">
                 <a href="#">Learning Hub <i class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
-                    <!-- Sorted Alphabetically -->
-                    <a href="game-8.html">Chat Game</a>
                     <a href="game-1.html">English Tenses</a>
-                    <a href="game-2.html">Listening Practice</a>
+                    <a href="game-2-interactive-stories.html">Interactive Stories</a>
+                    <a href="game-3-listeningpractice.html">Listening Practice</a>
                     <a href="game-3.html">Medical Terminology</a>
                     <a href="game-4.html">Reading Practice</a>
                     <a href="game-5.html">Sentence Building</a>
-                    <a href="game-6.html">Speaking Practice</a>
+                    <a href="game-7-speakingpractice.html">Speaking Practice</a>
                     <a href="game-7.html">Writing Game</a>
                 </div>
             </li>
-            <li><a href="chatbot.html">Chat with a Friend</a></li>
         </ul>
     </nav>
     
     <main>
-        <!-- Main Header -->
         <header class="main-header">
             <h1>Welcome, Kokoro</h1>
             <p>Your journey to learning English starts here. Explore a world of new words and phrases made just for you.</p>
         </header>
 
-        <!-- Main Content and Card Grid -->
         <section class="main-content">
             <div class="card-grid">
-                <!-- Cards based on the new layout, sorted alphabetically -->
-                <a href="game-8.html" class="card">
-                    <img src="images/icon-chatbot.png" alt="Chat Game" class="card-icon">
-                    <div class="card-text">
-                        <h3>Chat Game</h3>
-                        <p>Converse with an AI friend to practice conversational English.</p>
-                    </div>
-                </a>
                 <a href="game-1.html" class="card">
                     <img src="images/icon-tenses.png" alt="English Tenses" class="card-icon">
                     <div class="card-text">
@@ -382,7 +370,14 @@
                         <p>Learn the grammar that matters most.</p>
                     </div>
                 </a>
-                <a href="game-2.html" class="card">
+                <a href="game-2-interactive-stories.html" class="card">
+                    <img src="images/icon-stories.png" alt="Interactive Stories" class="card-icon">
+                    <div class="card-text">
+                        <h3>Interactive Stories</h3>
+                        <p>Enjoy thrilling adventures by navigating interactive stories set in a hospital.</p>
+                    </div>
+                </a>
+                <a href="game-3-listeningpractice.html" class="card">
                     <img src="images/icon-listening.png" alt="Listening Practice" class="card-icon">
                     <div class="card-text">
                         <h3>Listening Practice</h3>
@@ -410,7 +405,7 @@
                         <p>Put words together to make perfect sentences.</p>
                     </div>
                 </a>
-                <a href="game-6.html" class="card">
+                <a href="game-7-speakingpractice.html" class="card">
                     <img src="images/icon-speaking.png" alt="Speaking Practice" class="card-icon">
                     <div class="card-text">
                         <h3>Speaking Practice</h3>
@@ -434,9 +429,7 @@
             </div>
         </section>
 
-        <!-- New section for the three cards at the bottom of the page -->
         <section class="info-cards-container">
-            <!-- Block 1: Date & Time and Music Player -->
             <div class="info-card date-music-card">
                 <div class="date-time">
                     <div id="date-display"></div>
@@ -453,7 +446,6 @@
                 </div>
             </div>
 
-            <!-- Block 2: Current Weather -->
             <div class="info-card weather-card">
                 <h4 class="weather-title">Current Weather</h4>
                 <div id="current-weather">
@@ -465,13 +457,11 @@
                 </div>
             </div>
 
-            <!-- Block 3: 3-day Forecast -->
             <div class="info-card weather-card">
                 <div class="weather-forecasts-container">
                     <h4 class="weather-title">Next 3 Days</h4>
                     <div id="weather-forecasts" class="weather-days-row">
-                        <!-- Forecast items will be dynamically added here -->
-                    </div>
+                        </div>
                 </div>
             </div>
         </section>
@@ -576,7 +566,7 @@
         async function fetchWeather() {
             // Your WeatherAPI.com key is required here.
             // IMPORTANT: The API key must be a string, enclosed in quotes.
-            const apiKey = '2d03f2fd77a64b9784f24803252808'; 
+            const apiKey = '2d03f2fd77a64b9784f24803252808';
             if (apiKey === 'YOUR_API_KEY') {
                 console.error("Error: Please replace 'YOUR_API_KEY' with a valid WeatherAPI.com key.");
                 weatherTemp.textContent = '--°C';

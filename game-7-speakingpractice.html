@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speaking Practice Game</title>
+    <!-- Use Tailwind CSS for a modern and responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Apply the "Inter" font and some basic styling */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom styles for the progress bar animation */
+        .progress-bar {
+            width: 0;
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* Custom styles for the recording pulse animation */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .pulse-animation {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Styles for the voice visualizer canvas */
+        #voice-visualizer {
+            background-color: #4a4a4a; /* Dark gray for the visualizer background */
+            border-radius: 0.5rem;
+            border: 2px solid #555555;
+            margin-top: 1rem;
+            width: 100%;
+            height: 100px;
+        }
+        
+        /* Add custom styling for the black and yellow theme */
+        .bg-yellow-50 {
+            background-color: #fffbeb;
+        }
+        .text-yellow-800 {
+            color: #78350f;
+        }
+        .border-yellow-200 {
+            border-color: #fde68a;
+        }
+        .text-yellow-500 {
+            color: #eab308;
+        }
+        .flex-1 {
+            flex: 1;
+        }
+        
+        /* Custom styles for the dropdown menu to stay open on hover */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1a1a1a;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+        }
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #2a2a2a;
+            color: #eab308;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #eab308; /* Set the brand text to a single yellow color */
+        }
+        .navbar {
+            background-color: #000;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links li {
+            position: relative;
+        }
+        .nav-links a {
+            padding: 1rem;
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #eab308;
+        }
+        .fa-caret-down {
+            margin-left: 0.25rem;
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body class="bg-gray-900 text-white flex flex-col min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="index.html" class="nav-brand">Magical English Guide</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li class="dropdown">
+                    <a href="#">Learning Hub <i class="fas fa-caret-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="game-1.html">English Tenses</a>
+                        <a href="game-2-interactive-stories.html">Interactive Stories</a>
+                        <a href="game-3-listeningpractice.html">Listening Practice</a>
+                        <a href="game-3.html">Medical Terminology</a>
+                        <a href="game-4.html">Reading Practice</a>
+                        <a href="game-5.html">Sentence Building</a>
+                        <a href="game-7-speakingpractice.html">Speaking Practice</a>
+                        <a href="game-7.html">Writing Game</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Game Container -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-xl shadow-xl p-8 max-w-lg w-full flex flex-col items-center text-center">
+            <h1 class="text-2xl sm:text-3xl font-bold text-white mb-6">Speaking Practice</h1>
+            
+            <!-- Prompt Area (visible throughout the game) -->
+            <p id="prompt-text" class="text-lg sm:text-xl text-gray-300 font-medium mb-6">
+                <!-- Prompt will be inserted here by JavaScript -->
+            </p>
+
+            <!-- Initial State Area -->
+            <div id="initial-state-area" class="w-full transition-opacity duration-500">
+                <!-- Instruction to use headphones -->
+                <p class="text-sm font-semibold text-yellow-500 mb-4 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 1a8 8 0 0 0-8 8v5a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4v-5a8 8 0 0 0-8-8zm-6 8a6 6 0 0 1 12 0v5a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-5zM12 2c-4.418 0-8 3.582-8 8v5a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4v-5c0-4.418-3.582-8-8-8zm0 18a6 6 0 0 1-6-6v-5c0-3.314 2.686-6 6-6s6 2.686 6 6v5a6 6 0 0 1-6 6z"/>
+                        <path d="M17 14a1 1 0 0 1 1-1h1v1a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zM6 14a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zM11 20a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1z"/>
+                        <path d="M19 16a2 2 0 0 1-2 2h-2v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2H8a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4z"/>
+                    </svg>
+                    For best results, please use headphones with a microphone.
+                </p>
+                <p id="visualizer-instructions" class="text-gray-500 text-sm mb-2">Speak to see the visualizer react!</p>
+                <!-- Voice Visualizer Canvas -->
+                <canvas id="voice-visualizer"></canvas>
+                <div class="flex flex-col sm:flex-row gap-4 mt-6 w-full justify-center">
+                    <button id="change-question-button" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full transition-colors transform hover:scale-105 flex-1">
+                        Change Question
+                    </button>
+                    <button id="record-button" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-full shadow-lg transition-transform transform hover:scale-105 flex-1">
+                        Start Recording
+                    </button>
+                </div>
+                <p id="support-message" class="text-xs text-red-500 mt-4 hidden">
+                    Speech recognition not supported or microphone not found. Please try Chrome or Edge.
+                </p>
+                <p id="permission-message" class="text-xs text-red-500 mt-4 hidden">
+                    Microphone permission denied. Please enable it in your browser settings.
+                </p>
+            </div>
+
+            <!-- Recording Progress Area (Initially hidden) -->
+            <div id="recording-area" class="hidden w-full flex flex-col items-center">
+                <p id="recording-message" class="text-lg font-semibold text-gray-300 mb-4">
+                    Recording...
+                </p>
+                <div class="w-full bg-gray-700 rounded-full h-4 mb-4">
+                    <div id="progress-bar" class="bg-yellow-500 h-4 rounded-full progress-bar" style="width: 0%;"></div>
+                </div>
+                <p id="timer-text" class="text-sm text-gray-500">0 seconds</p>
+                <button id="stop-button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-transform transform hover:scale-105 mt-6">
+                    Stop Recording
+                </button>
+            </div>
+
+            <!-- Feedback and Results Area (Initially Hidden) -->
+            <div id="feedback-area" class="hidden transition-opacity duration-500 w-full mt-8">
+                <div id="feedback-card" class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 w-full text-left">
+                    <h3 class="text-xl font-bold text-yellow-800 mb-2 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-yellow-600" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                        Your Results
+                    </h3>
+                    <p class="text-gray-800 text-base mb-2 font-semibold">Your Transcribed Answer:</p>
+                    <p id="transcribed-text" class="text-gray-700 text-base italic mb-4 p-2 bg-gray-100 rounded-md"></p>
+                    <p id="score-text" class="text-sm font-bold text-yellow-600"></p>
+                </div>
+                
+                <!-- Buttons and LLM Feedback Area -->
+                <div class="flex flex-col sm:flex-row gap-4 mt-6 w-full justify-center">
+                    <button id="download-button" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-full shadow-lg transition-transform transform hover:scale-105 flex-1 hidden">
+                        Download Recording
+                    </button>
+                    <button id="submit-button" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-full shadow-lg transition-transform transform hover:scale-105 flex-1">
+                        Submit for Analysis
+                    </button>
+                    <button id="try-again-button" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full transition-colors transform hover:scale-105 flex-1">
+                        Try Again
+                    </button>
+                </div>
+
+                <div id="llm-feedback-card" class="bg-gray-800 rounded-xl shadow-xl p-6 w-full mt-6 hidden">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                        AI-Powered Analysis
+                    </h3>
+                    <p id="llm-feedback-text" class="text-gray-300 text-base leading-relaxed"></p>
+                </div>
+            </div>
+            
+            <!-- Loading message for API call -->
+            <div id="loading-message" class="hidden text-center mt-6">
+                <div class="animate-spin rounded-full h-12 w-12 border-4 border-yellow-500 border-t-transparent mx-auto mb-2"></div>
+                <p class="text-gray-400 font-semibold">Analyzing your answer...</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Get references to DOM elements
+        const recordButton = document.getElementById('record-button');
+        const stopButton = document.getElementById('stop-button');
+        const tryAgainButton = document.getElementById('try-again-button');
+        const submitButton = document.getElementById('submit-button');
+        const downloadButton = document.getElementById('download-button');
+        const changeQuestionButton = document.getElementById('change-question-button');
+        const initialStateArea = document.getElementById('initial-state-area');
+        const recordingArea = document.getElementById('recording-area');
+        const feedbackArea = document.getElementById('feedback-area');
+        const scoreText = document.getElementById('score-text');
+        const progressBar = document.getElementById('progress-bar');
+        const timerText = document.getElementById('timer-text');
+        const promptText = document.getElementById('prompt-text');
+        const transcribedTextElement = document.getElementById('transcribed-text');
+        const supportMessage = document.getElementById('support-message');
+        const permissionMessage = document.getElementById('permission-message');
+        const voiceVisualizer = document.getElementById('voice-visualizer');
+        const visualizerInstructions = document.getElementById('visualizer-instructions');
+        const llmFeedbackCard = document.getElementById('llm-feedback-card');
+        const llmFeedbackText = document.getElementById('llm-feedback-text');
+        const loadingMessage = document.getElementById('loading-message');
+
+        // Global variables
+        let finalTranscript = '';
+        let timerInterval;
+        const MAX_RECORDING_TIME = 120; // in seconds
+        let timeElapsed = 0;
+        let mediaRecorder;
+        const audioChunks = [];
+        let audioBlob;
+        let isRecording = false;
+
+        // --- Voice Visualizer & Web Audio API Logic ---
+        const canvasCtx = voiceVisualizer.getContext("2d");
+        let audioCtx, analyser, source;
+        let visualizerAnimationFrame;
+
+        // Function to set up the audio visualizer and request mic permission
+        async function setupAudioVisualizer() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                source = audioCtx.createMediaStreamSource(stream);
+                
+                analyser.fftSize = 256;
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                
+                source.connect(analyser);
+
+                function draw() {
+                    visualizerAnimationFrame = requestAnimationFrame(draw);
+                    
+                    analyser.getByteFrequencyData(dataArray);
+                    
+                    canvasCtx.clearRect(0, 0, voiceVisualizer.width, voiceVisualizer.height);
+                    
+                    const barWidth = (voiceVisualizer.width / bufferLength) * 2.5;
+                    let x = 0;
+                    
+                    for (let i = 0; i < bufferLength; i++) {
+                        const barHeight = dataArray[i] / 255 * voiceVisualizer.height;
+                        canvasCtx.fillStyle = `rgb(255, 223, 0, ${barHeight / voiceVisualizer.height + 0.2})`; // Yellow color
+                        canvasCtx.fillRect(x, voiceVisualizer.height - barHeight, barWidth, barHeight);
+                        x += barWidth + 1;
+                    }
+                }
+                
+                draw();
+                
+                supportMessage.classList.add('hidden');
+                permissionMessage.classList.add('hidden');
+                
+                // Set up the MediaRecorder to capture audio for download
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    downloadButton.classList.remove('hidden');
+                };
+            } catch (err) {
+                console.error("Microphone access error:", err);
+                voiceVisualizer.classList.add('hidden');
+                visualizerInstructions.classList.add('hidden');
+                recordButton.disabled = true;
+                recordButton.textContent = 'Mic not found';
+                if (err.name === 'NotAllowedError' || err.name === 'SecurityError') {
+                    permissionMessage.classList.remove('hidden');
+                } else if (err.name === 'NotFoundError') {
+                    supportMessage.textContent = 'No microphone device found.';
+                    supportMessage.classList.remove('hidden');
+                } else {
+                    supportMessage.textContent = 'An error occurred. Please try again.';
+                    supportMessage.classList.remove('hidden');
+                }
+            }
+        }
+
+        // Check for Speech Recognition API support
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const isSupported = window.SpeechRecognition;
+
+        if (!isSupported) {
+            recordButton.disabled = true;
+            recordButton.textContent = 'Not Supported';
+            supportMessage.classList.remove('hidden');
+            voiceVisualizer.classList.add('hidden');
+        }
+
+        const recognition = isSupported ? new SpeechRecognition() : null;
+
+        if (recognition) {
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript + ' ';
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+                transcribedTextElement.textContent = finalTranscript + interimTranscript;
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error:", event.error);
+                if (isRecording) {
+                    stopRecording();
+                }
+                if (event.error === 'no-speech' || event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                    permissionMessage.classList.remove('hidden');
+                    feedbackArea.classList.add('hidden');
+                    initialStateArea.classList.remove('hidden');
+                } else {
+                    transcribedTextElement.textContent = `An error occurred: ${event.error}. Please try again.`;
+                }
+            };
+            
+            recognition.onend = () => {
+                isRecording = false;
+            };
+
+            // Sample prompts for variety
+            const prompts = [
+                "Describe your favorite hobby and why you enjoy it.",
+                "Tell me about a memorable trip you've taken.",
+                "Explain a simple recipe to someone who has never cooked before.",
+                "What's your favorite season and why?",
+                "Imagine you could have any superpower. What would it be and how would you use it?",
+                "Describe the best book or movie you've experienced recently.",
+                "If you could travel anywhere in the world, where would you go and why?",
+                "What is a personal goal you're currently working on, and how do you plan to achieve it?",
+                "Explain the rules of a simple board game or card game.",
+                "Talk about a person who has had a significant positive impact on your life."
+            ];
+
+            // Function to select a random prompt
+            function getRandomPrompt() {
+                const randomIndex = Math.floor(Math.random() * prompts.length);
+                return prompts[randomIndex];
+            }
+
+            // Function to stop recording and show results
+            function stopRecording() {
+                if (isRecording) {
+                    if (recognition) {
+                        recognition.stop();
+                    }
+                    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                        mediaRecorder.stop();
+                    }
+                    clearInterval(timerInterval);
+                    isRecording = false;
+                }
+                
+                initialStateArea.classList.add('hidden');
+                recordingArea.classList.add('hidden');
+                feedbackArea.classList.remove('hidden');
+                feedbackArea.classList.add('opacity-100');
+            }
+
+            // Function to handle the API call for LLM analysis
+            async function getLlmFeedback() {
+                llmFeedbackCard.classList.add('hidden');
+                llmFeedbackText.textContent = '';
+                loadingMessage.classList.remove('hidden');
+                submitButton.disabled = true;
+
+                try {
+                    const prompt = promptText.textContent;
+                    const transcribedText = transcribedTextElement.textContent;
+                    
+                    // Convert audio blob to base64 string
+                    const audioBuffer = await audioBlob.arrayBuffer();
+                    const audioBase64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
+                    
+                    const systemPrompt = "You are a helpful and encouraging English speaking tutor. Your task is to analyze a student's spoken answer to a given question and provide constructive feedback. Base your analysis on the provided audio and its transcribed text. Evaluate the answer's relevance to the question and suggest improvements for content, clarity, or vocabulary. Do not give a score. Provide a corrected, more accurate transcript based on the audio.";
+                    const userQuery = `The question was: "${prompt}". The student's transcribed answer is: "${transcribedText}". Provide feedback and a corrected transcript.`;
+
+                    const payload = {
+                        contents: [{
+                            parts: [
+                                { text: userQuery },
+                                {
+                                    inlineData: {
+                                        mimeType: "audio/wav",
+                                        data: audioBase64
+                                    }
+                                }
+                            ]
+                        }],
+                        tools: [{ "google_search": {} }],
+                        systemInstruction: {
+                            parts: [{ text: systemPrompt }]
+                        },
+                    };
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                    let response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    // Exponential backoff for retries
+                    let retries = 0;
+                    const maxRetries = 3;
+                    while (!response.ok && retries < maxRetries) {
+                        retries++;
+                        const delay = Math.pow(2, retries) * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(`API call failed with status: ${response.status}. This can sometimes happen in this environment due to API key limitations.`);
+                    }
+
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+                    const feedback = candidate?.content?.parts?.[0]?.text || "Could not retrieve feedback. Please try again.";
+
+                    llmFeedbackText.textContent = feedback;
+                    llmFeedbackCard.classList.remove('hidden');
+
+                } catch (error) {
+                    console.error("Error fetching LLM feedback:", error);
+                    llmFeedbackText.textContent = `Sorry, an error occurred while analyzing your response. Please try again later. Error: ${error.message}`;
+                    llmFeedbackCard.classList.remove('hidden');
+                } finally {
+                    loadingMessage.classList.add('hidden');
+                    submitButton.disabled = false;
+                }
+            }
+
+            // Function to handle the download of the audio blob
+            function handleDownload() {
+                if (audioBlob) {
+                    const url = URL.createObjectURL(audioBlob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = 'my-recording.wav';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    console.error("No audio blob available to download.");
+                }
+            }
+
+            // Handle the recording button click
+            function handleRecordClick() {
+                // Clear previous transcript and messages
+                finalTranscript = '';
+                transcribedTextElement.textContent = '';
+                permissionMessage.classList.add('hidden');
+                downloadButton.classList.add('hidden');
+                llmFeedbackCard.classList.add('hidden');
+                audioChunks.length = 0; // Clear the audio chunks
+                isRecording = true;
+
+                // Stop the visualizer animation
+                if (visualizerAnimationFrame) {
+                    cancelAnimationFrame(visualizerAnimationFrame);
+                }
+
+                // Hide the initial state area and show the recording area
+                initialStateArea.classList.add('hidden');
+                recordingArea.classList.remove('hidden');
+                
+                // Reset timer
+                timeElapsed = 0;
+                timerText.textContent = `0 seconds`;
+
+                // Start the recognition and timer
+                recognition.start();
+                if (mediaRecorder) {
+                    mediaRecorder.start();
+                }
+
+                timerInterval = setInterval(() => {
+                    timeElapsed++;
+                    timerText.textContent = `${timeElapsed} seconds`;
+
+                    if (timeElapsed >= MAX_RECORDING_TIME) {
+                        stopRecording();
+                    }
+                }, 1000);
+            }
+
+            // Handle the try again button click
+            function handleTryAgainClick() {
+                stopRecording();
+                feedbackArea.classList.add('hidden');
+                initialStateArea.classList.remove('hidden');
+                
+                transcribedTextElement.textContent = '';
+                
+                // Restart the visualizer
+                setupAudioVisualizer();
+            }
+
+            // Handle the change question button click
+            function handleChangeQuestionClick() {
+                promptText.textContent = getRandomPrompt();
+            }
+            
+            // Add event listeners
+            recordButton.addEventListener('click', handleRecordClick);
+            stopButton.addEventListener('click', stopRecording);
+            tryAgainButton.addEventListener('click', handleTryAgainClick);
+            submitButton.addEventListener('click', getLlmFeedback);
+            downloadButton.addEventListener('click', handleDownload);
+            changeQuestionButton.addEventListener('click', handleChangeQuestionClick);
+            
+            // Set an initial random prompt when the page loads and set up the visualizer
+            promptText.textContent = getRandomPrompt();
+            setupAudioVisualizer();
+        }
+    </script>
+</body>
+</html>

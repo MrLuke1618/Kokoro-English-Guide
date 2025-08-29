@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nurse Kokoro's Adventures</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .scrollbar-thin {
+            scrollbar-width: thin;
+            scrollbar-color: #4a5568 #1a202c; /* thumb and track color */
+        }
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #1a202c;
+            border-radius: 10px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 10px;
+            border: 2px solid #1a202c;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900 min-h-screen text-gray-100 p-4 flex items-center justify-center">
+
+    <!-- Main game container -->
+    <div class="w-full max-w-2xl bg-gray-900 rounded-2xl shadow-2xl p-6 flex flex-col min-h-[80vh] sm:min-h-[70vh]">
+
+        <!-- Header with title, score, and buttons -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-4 pb-2 border-b border-gray-700">
+            <!-- Title with reduced font size -->
+            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white mb-4 sm:mb-0 whitespace-nowrap">Interactive Stories</h1>
+            
+            <!-- Score on a single line -->
+            <div class="flex items-center text-xl font-semibold text-yellow-300 mb-4 sm:mb-0">
+                <span>Score:</span>
+                <span id="score" class="ml-1">0</span>
+            </div>
+
+            <!-- Button groups with uniform size -->
+            <div class="flex flex-col space-y-2 w-full sm:w-auto">
+                <!-- First line of buttons -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="music-button" class="px-4 py-2 bg-gray-700 text-white font-semibold rounded-full shadow-lg hover:bg-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-900">Play Music</button>
+                    <button id="main-hub-button" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-full shadow-lg hover:bg-red-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 hidden">Main Hub</button>
+                </div>
+                <!-- Second line of buttons -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="story-selection-button" class="px-4 py-2 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900 hidden">Story Selection</button>
+                    <button id="restart-button" class="px-4 py-2 bg-purple-500 text-white font-semibold rounded-full shadow-lg hover:bg-purple-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 hidden">Restart Story</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat history container -->
+        <div id="chat-container" class="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+        </div>
+
+        <!-- Options and actions area -->
+        <div id="action-area" class="mt-4 pt-4 border-t border-gray-700">
+            <!-- Buttons will be dynamically inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Audio element for background music -->
+    <audio id="background-music" loop>
+        <source src="https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Define the game script as a simple JavaScript object
+        const gameScript = {
+            intro: {
+                text: "Welcome, Nurse Kokoro! Choose your adventure to begin:",
+                options: [
+                    { text: "The Case of the Missing Charts", next: "charts_start" },
+                    { text: "The Mystery of the Pediatric Ward", next: "pediatric_start" },
+                    { text: "The ER Rush Hour", next: "er_start" },
+                    { text: "The Potion of Pure Rest", next: "potion_start" },
+                    { text: "The Phantom Pain", next: "pain_start" },
+                    { text: "The Time Capsule Delivery", next: "capsule_start" },
+                    { text: "The Code Blue Drill", next: "codeblue_start" },
+                    { text: "The Hospital Garden's Secret", next: "garden_start" },
+                    { text: "The Infection Investigation", next: "infection_start" },
+                    { text: "The Lost Doctor's Journal", next: "journal_start" },
+                    // Added more stories to showcase the new design
+                    { text: "The Mystery of the Spooky Elevator", next: "spooky_elevator_start" },
+                    { text: "The Case of the Talking Pet", next: "talking_pet_start" },
+                    { text: "The Stolen Lunchbox", next: "stolen_lunch_start" },
+                ]
+            },
+            // --- Extended content for 'The Case of the Missing Charts' ---
+            charts_start: {
+                text: "The patient's charts for your ward have vanished! The head nurse is asking for them. You can either search the filing room or talk to the night shift nurse. What do you do?",
+                options: [
+                    { text: "Search the filing room.", next: "charts_search_path", scoreChange: 5 },
+                    { text: "Talk to the night shift nurse.", next: "charts_talk_path", scoreChange: 15 }
+                ]
+            },
+            charts_search_path: {
+                text: "You search for hours but find nothing. The head nurse is not happy. You feel like you wasted a lot of time. You decide to search a secret area. What do you do?",
+                options: [
+                    { text: "Search the secret closet.", next: "charts_search_closet", scoreChange: 5 },
+                    { text: "Search the laundry room.", next: "charts_search_laundry", scoreChange: -5 }
+                ]
+            },
+            charts_search_closet: {
+                text: "You find the charts in the closet! They were hidden there to protect them from a spill. The head nurse thanks you for being so careful.",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            charts_search_laundry: {
+                text: "You search the laundry room, but you find nothing. The head nurse is very mad at you. You have lost the case.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            charts_talk_path: {
+                text: "The night shift nurse smiles and says, 'Oh, I put them in the new digital system. Here's a link!' You quickly find the charts and the head nurse thanks you for your smart thinking. But wait, another problem has appeared! You need to go find a doctor to help with another case. You have to go to the doctor's lounge or the emergency room. What do you do?",
+                options: [
+                    { text: "Go to the doctor's lounge.", next: "charts_talk_lounge", scoreChange: 5 },
+                    { text: "Go to the emergency room.", next: "charts_talk_er", scoreChange: 10 }
+                ]
+            },
+            charts_talk_lounge: {
+                text: "You find the doctor you were looking for. The head nurse thanks you for your quick thinking. You have successfully solved the mystery of the missing charts!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            charts_talk_er: {
+                text: "You go to the emergency room, but the doctor you're looking for is in a surgery. The patient's condition gets worse and worse. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            // --- End of extended content for 'The Case of the Missing Charts' ---
+
+            // --- Extended content for 'The Mystery of the Pediatric Ward' ---
+            pediatric_start: {
+                text: "A young patient on the pediatric ward is very sad and won't talk. Their parents are worried. You can try to distract them with a story or bring their favorite stuffed animal. What do you do?",
+                options: [
+                    { text: "Tell them a story.", next: "pediatric_story_path", scoreChange: -5 },
+                    { text: "Bring their stuffed animal.", next: "pediatric_animal_path", scoreChange: 10 }
+                ]
+            },
+            pediatric_story_path: {
+                text: "The patient is too sad to listen to your story. They start crying. You need a different approach. You decide to sing a song. What do you sing?",
+                options: [
+                    { text: "Sing 'Twinkle, Twinkle, Little Star.'", next: "pediatric_sing_star", scoreChange: 5 },
+                    { text: "Sing the hospital's theme song.", next: "pediatric_sing_theme", scoreChange: -5 }
+                ]
+            },
+            pediatric_sing_star: {
+                text: "You sing a beautiful lullaby, and the patient smiles. They feel better and start talking to their parents. You have won!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            pediatric_sing_theme: {
+                text: "The patient is confused by the song and starts crying more. You need a different approach. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            pediatric_animal_path: {
+                text: "You bring their favorite teddy bear. The patient's face lights up, and they give you a big smile. But they are still refusing to take their medicine. You can either give them a tasty juice or a lollipop. What do you do?",
+                options: [
+                    { text: "Give them a tasty juice.", next: "pediatric_juice", scoreChange: 10 },
+                    { text: "Give them a lollipop.", next: "pediatric_lollipop", scoreChange: -10 }
+                ]
+            },
+            pediatric_juice: {
+                text: "You hide the medicine in the juice. They drink it all and get better! You are the best nurse ever!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            pediatric_lollipop: {
+                text: "The patient loves the lollipop, but they don't take their medicine. They get worse and worse. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            // --- End of extended content for 'The Mystery of the Pediatric Ward' ---
+
+            // --- Extended content for 'The ER Rush Hour' ---
+            er_start: {
+                text: "The Emergency Room is full of patients. One patient needs help with a cut, and another needs help with a headache. You only have time for one. Who do you help first?",
+                options: [
+                    { text: "Help the patient with the cut.", next: "er_cut_path", scoreChange: 5 },
+                    { text: "Help the patient with the headache.", next: "er_headache_path", scoreChange: -10 }
+                ]
+            },
+            er_cut_path: {
+                text: "You quickly clean the cut and put a bandage on it. The patient is grateful. But then another emergency call comes in! A patient is having an allergic reaction. You have to rush to the room. What do you do?",
+                options: [
+                    { text: "Rush to the room on foot.", next: "er_rush_foot", scoreChange: 10 },
+                    { text: "Take the emergency cart.", next: "er_rush_cart", scoreChange: 5 }
+                ]
+            },
+            er_rush_foot: {
+                text: "You run to the room and get there in time to give the patient the medicine. You saved their life! You are a hero!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            er_rush_cart: {
+                text: "You take the emergency cart, but it gets stuck in the hallway. You are too late, and the patient's condition gets worse. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            er_headache_path: {
+                text: "You give the patient with the headache some medicine, but the other patient's cut starts bleeding a lot. The cut becomes a bigger problem, and you should have taken care of it first. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            // --- End of extended content for 'The ER Rush Hour' ---
+
+            // Original stories
+            potion_start: {
+                text: "An elderly patient cannot sleep. A visiting herbalist offers you two potions: one from a red bottle and one from a blue bottle. They say one will help the patient sleep, and the other is just water. Which do you choose?",
+                options: [
+                    { text: "Choose the red potion.", next: "potion_red", scoreChange: -5 },
+                    { text: "Choose the blue potion.", next: "potion_blue", scoreChange: 10 }
+                ]
+            },
+            potion_red: {
+                text: "You give the patient the red potion, but it was just water. The patient still can't sleep. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            potion_blue: {
+                text: "You give the patient the blue potion. It has a magical scent, and soon the patient falls into a deep, peaceful sleep. The herbalist winks at you. You made the right choice!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            pain_start: {
+                text: "A patient says they are in great pain, but their test results are normal. You can either give them a placebo (sugar pill) or talk to them to find the real source of their pain. What do you do?",
+                options: [
+                    { text: "Give them a placebo.", next: "pain_placebo", scoreChange: -10 },
+                    { text: "Talk to them to find the real source.", next: "pain_talk", scoreChange: 15 }
+                ]
+            },
+            pain_placebo: {
+                text: "The patient feels no relief and becomes angry. They say, 'You don't believe me!' You have broken their trust. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            pain_talk: {
+                text: "You sit with the patient and listen. They tell you they are sad because their family is far away. You call their family on a video call, and they feel much better. You have won!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            capsule_start: {
+                text: "A very old doctor gives you a strange box and says, 'This must be delivered to Room 301 in exactly 5 minutes.' You have 2 routes: the slow, safe elevator or the fast, dangerous stairs. Which route do you take?",
+                options: [
+                    { text: "Take the slow elevator.", next: "capsule_elevator", scoreChange: 5 },
+                    { text: "Take the fast stairs.", next: "capsule_stairs", scoreChange: -10 }
+                ]
+            },
+            capsule_elevator: {
+                text: "You get to Room 301, but you are 2 minutes late. The box disappears. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            capsule_stairs: {
+                text: "You run up the stairs, but you trip and fall. You still get there on time! The box opens, revealing a cure for all diseases. You have saved the world! You have won!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            codeblue_start: {
+                text: "A code blue is announced! You run to the room and see the patient is in trouble. You can either do CPR or find the defibrillator. You only have a few seconds to decide. What do you do?",
+                options: [
+                    { text: "Start CPR.", next: "codeblue_cpr", scoreChange: 10 },
+                    { text: "Find the defibrillator.", next: "codeblue_defib", scoreChange: -10 }
+                ]
+            },
+            codeblue_cpr: {
+                text: "You start CPR, and the patient's heart starts beating again! Another nurse brings the defibrillator, but you saved the day. You are a hero! You have won!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            codeblue_defib: {
+                text: "You run to find the defibrillator, but you get lost. The patient's heart stops. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            garden_start: {
+                text: "You find a hidden garden behind the hospital. A sign says, 'Only a true healer may pick the healing flowers.' You can either pick a flower for a patient or just enjoy the view. What do you do?",
+                options: [
+                    { text: "Pick a flower for a patient.", next: "garden_pick", scoreChange: 10 },
+                    { text: "Just enjoy the view.", next: "garden_view", scoreChange: 0 }
+                ]
+            },
+            garden_pick: {
+                text: "You pick a glowing flower for a patient. When you give it to them, all their pain goes away. You have helped a lot of people!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            garden_view: {
+                text: "You enjoy the view, and you feel very relaxed. The garden's magic is still a mystery to you. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'neutral'
+            },
+            infection_start: {
+                text: "There is an outbreak of a mysterious infection in the hospital. You can either follow the proper hand-washing rules or try a new, unproven disinfectant. What do you do?",
+                options: [
+                    { text: "Follow the proper hand-washing rules.", next: "infection_rules", scoreChange: 15 },
+                    { text: "Try the new disinfectant.", next: "infection_disinfectant", scoreChange: -10 }
+                ]
+            },
+            infection_rules: {
+                text: "You are careful and follow all the rules. The infection stops spreading. You have saved the hospital!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            infection_disinfectant: {
+                text: "The new disinfectant doesn't work, and the infection spreads to more people. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            journal_start: {
+                text: "You find an old, lost journal belonging to a famous doctor. It is written in a secret code. You can either throw it away or try to solve the code. What do you do?",
+                options: [
+                    { text: "Throw it away.", next: "journal_throw", scoreChange: -5 },
+                    { text: "Try to solve the code.", next: "journal_solve", scoreChange: 20 }
+                ]
+            },
+            journal_throw: {
+                text: "You throw the journal away, thinking it is old junk. You feel like you missed a big secret. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'neutral'
+            },
+            journal_solve: {
+                text: "You use your knowledge of medical terms to solve the code. The journal has the key to a cure for a rare disease. You have made a big discovery!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            // Added new stories here.
+            spooky_elevator_start: {
+                text: "You are on the night shift when the elevator to the basement starts acting strangely. It stops and the lights flicker. You can either investigate or wait for the morning. What do you do?",
+                options: [
+                    { text: "Investigate.", next: "spooky_elevator_investigate", scoreChange: 15 },
+                    { text: "Wait for the morning.", next: "spooky_elevator_wait", scoreChange: -5 }
+                ]
+            },
+            spooky_elevator_investigate: {
+                text: "You open the elevator's panel and find a loose wire. You fix it, and the lights turn on. The elevator starts working again. You have fixed the problem!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            spooky_elevator_wait: {
+                text: "You wait for the morning, but the elevator breaks down completely. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            talking_pet_start: {
+                text: "A patient's pet parrot starts speaking in a human voice, giving you medical advice. You can either listen to it or ignore it. What do you do?",
+                options: [
+                    { text: "Listen to the parrot.", next: "talking_pet_listen", scoreChange: 10 },
+                    { text: "Ignore the parrot.", next: "talking_pet_ignore", scoreChange: -10 }
+                ]
+            },
+            talking_pet_listen: {
+                text: "You listen to the parrot, and it gives you a diagnosis that is correct. You have learned to listen to all forms of communication. You have won!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+            talking_pet_ignore: {
+                text: "You ignore the parrot, and you give the wrong diagnosis. The patient's condition gets worse. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            stolen_lunch_start: {
+                text: "Your lunchbox has been stolen! You can either confront the person you suspect or buy a new lunch. What do you do?",
+                options: [
+                    { text: "Confront the person.", next: "stolen_lunch_confront", scoreChange: 5 },
+                    { text: "Buy a new lunch.", next: "stolen_lunch_buy", scoreChange: 15 }
+                ]
+            },
+            stolen_lunch_confront: {
+                text: "You confront the person, but they say they didn't do it. You have caused a scene and are very embarrassed. The end.",
+                options: [],
+                isEnd: true,
+                endState: 'lose'
+            },
+            stolen_lunch_buy: {
+                text: "You buy a new lunch and find out the person who stole your lunch was just a little kid who was hungry. You feel good about your decision. You have won!",
+                options: [],
+                isEnd: true,
+                endState: 'win'
+            },
+        };
+
+        let score = 0;
+        let currentQuestion = 'intro';
+        let isStorySelected = false;
+        let initialStoryStartNode = null;
+        let musicPlaying = false;
+        const chatContainer = document.getElementById('chat-container');
+        const actionArea = document.getElementById('action-area');
+        const scoreDisplay = document.getElementById('score');
+        const storySelectionButton = document.getElementById('story-selection-button');
+        const restartButton = document.getElementById('restart-button');
+        const mainHubButton = document.getElementById('main-hub-button');
+        const musicButton = document.getElementById('music-button');
+        const backgroundMusic = document.getElementById('background-music');
+
+        function addMessage(sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+            const innerDiv = document.createElement('div');
+            innerDiv.className = `max-w-[80%] p-4 rounded-lg shadow-md ${
+                sender === 'user'
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-gray-700 text-gray-200'
+            }`;
+            innerDiv.textContent = text;
+            messageDiv.appendChild(innerDiv);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function renderQuestion(questionId) {
+            const node = gameScript[questionId];
+            if (!node) return;
+
+            actionArea.innerHTML = ''; // Clear previous options
+            addMessage('bot', node.text);
+
+            if (node.isEnd) {
+                let endMessage = "";
+                if (node.endState === 'win') {
+                    endMessage = `🎉 You won! Final Score: ${score} 🎉`;
+                    scoreDisplay.textContent = score;
+                } else if (node.endState === 'lose') {
+                    endMessage = `Game Over. Final Score: ${score}`;
+                    scoreDisplay.textContent = score;
+                } else {
+                    endMessage = `The story has ended. Final Score: ${score}`;
+                    scoreDisplay.textContent = score;
+                }
+
+                const finalMessageDiv = document.createElement('div');
+                finalMessageDiv.className = "text-center font-bold text-xl";
+                finalMessageDiv.textContent = endMessage;
+
+                const playAgainButton = document.createElement('button');
+                playAgainButton.textContent = "Play Again";
+                playAgainButton.className = "w-full mt-4 px-6 py-3 bg-purple-700 text-white font-semibold rounded-full shadow-lg hover:bg-purple-600 transition-colors duration-200";
+                playAgainButton.onclick = () => {
+                    handleReturnToSelection();
+                };
+
+                actionArea.appendChild(finalMessageDiv);
+                actionArea.appendChild(playAgainButton);
+            } else {
+                node.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option.text;
+                    button.className = "w-full text-left px-4 py-3 bg-gray-700 text-gray-200 rounded-lg hover:bg-indigo-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2"; // Added mb-2 for spacing
+                    button.onclick = () => handleChoice(option);
+                    actionArea.appendChild(button);
+                });
+            }
+        }
+
+        function handleChoice(option) {
+            // Start music on first choice
+            if (!musicPlaying) {
+                backgroundMusic.play();
+                musicPlaying = true;
+                musicButton.textContent = 'Pause Music';
+            }
+
+            addMessage('user', option.text);
+
+            if (option.scoreChange !== undefined) {
+                score += option.scoreChange;
+                scoreDisplay.textContent = score;
+            }
+
+            if (currentQuestion === 'intro') {
+                isStorySelected = true;
+                initialStoryStartNode = option.next;
+                storySelectionButton.classList.remove('hidden');
+                restartButton.classList.remove('hidden');
+                mainHubButton.classList.remove('hidden');
+            }
+
+            currentQuestion = option.next;
+            setTimeout(() => renderQuestion(currentQuestion), 500);
+        }
+
+        function handleReturnToSelection() {
+            chatContainer.innerHTML = '';
+            score = 0;
+            scoreDisplay.textContent = score;
+            currentQuestion = 'intro';
+            isStorySelected = false;
+            initialStoryStartNode = null;
+            storySelectionButton.classList.add('hidden');
+            restartButton.classList.add('hidden');
+            mainHubButton.classList.add('hidden');
+            renderQuestion('intro');
+        }
+
+        function handleRestartStory() {
+            if (initialStoryStartNode) {
+                chatContainer.innerHTML = '';
+                score = 0;
+                scoreDisplay.textContent = score;
+                currentQuestion = initialStoryStartNode;
+                renderQuestion(currentQuestion);
+            }
+        }
+
+        function handleMainHubRedirect() {
+            window.location.href = 'index.html';
+        }
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                backgroundMusic.pause();
+                musicButton.textContent = 'Play Music';
+            } else {
+                backgroundMusic.play();
+                musicButton.textContent = 'Pause Music';
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        storySelectionButton.onclick = handleReturnToSelection;
+        restartButton.onclick = handleRestartStory;
+        mainHubButton.onclick = handleMainHubRedirect;
+        musicButton.onclick = toggleMusic;
+
+        // Initial call to start the game
+        renderQuestion(currentQuestion);
+
+    </script>
+</body>
+</html>

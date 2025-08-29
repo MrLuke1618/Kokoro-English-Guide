@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical English Guide - Tutorial</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&family=Sacramento&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0d0d0d;
+            color: #f0f0f0;
+            line-height: 1.6;
+            background-image: url('images/menu-bg.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 2rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            font-family: 'Sacramento', cursive;
+            font-size: 2rem;
+            color: #ffd700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+            position: relative;
+        }
+
+        .nav-links li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links li a:hover {
+            color: #ffd700;
+        }
+
+        /* Dropdown menu for Learning Hub */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffd700;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .main-header {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .main-header h1 {
+            font-size: 3rem;
+            color: #fff;
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+        }
+
+        .main-header p {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-top: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .main-content {
+            padding: 2rem;
+            flex-grow: 1;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Styles for the instructional cards (non-clickable) with consistent layout */
+        .tutorial-card {
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            color: #f0f0f0;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            padding: 2rem;
+            display: flex;
+            flex-direction: row; /* Aligns icon and text side-by-side */
+            align-items: center; /* Centers items vertically */
+            gap: 1.5rem; /* Space between icon and text */
+        }
+        
+        /* New styles for the clickable game cards */
+        .game-card {
+            background-color: rgba(255, 215, 0, 0.4); /* Brighter, more visible gold */
+            backdrop-filter: blur(10px);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            text-decoration: none;
+            padding: 2rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: row; /* Change to row to align icon and text side-by-side */
+            align-items: center; /* Center items vertically */
+            gap: 1.5rem; /* Space between icon and text */
+            cursor: pointer; /* Add cursor pointer for better UX */
+        }
+
+        /* Common hover effect for clickable cards */
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+        }
+        
+        /* Styles for the text content within cards */
+        .card-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Common card styling for headings, adjusted font-size */
+        .tutorial-card h3, .game-card h3 {
+            color: #fff;
+            font-size: 1.25rem; /* Reduced from 1.5rem to 1.25rem */
+            margin-top: 0;
+            margin-bottom: 0.25rem;
+            white-space: nowrap; /* Prevents wrapping */
+        }
+
+        /* Common card styling for paragraphs */
+        .tutorial-card p {
+            color: #ccc;
+            font-size: 1rem;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
+        }
+        
+        .game-card p {
+            color: #fff;
+            font-size: 1rem;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
+        }
+        
+        /* Consistent icon styling */
+        .tutorial-icon, .game-icon {
+            font-size: 3rem;
+        }
+
+        /* Specific icon color for instructional cards */
+        .tutorial-icon {
+            color: #ffd700;
+        }
+        
+        /* Specific icon color for game cards */
+        .game-icon {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">Magical English Guide</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#">Learning Hub <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <!-- Updated with meaningful links -->
+                    <a href="game-1-englishtenses.html">English Tenses</a>
+                    <a href="game-2-interactive-stories.html">Interactive Stories</a>
+                    <a href="game-3-listeningpractice.html">Listening Practice</a>
+                    <a href="game-3-medicalterminology.html">Medical Terminology</a>
+                    <a href="game-4-readingpractice.html">Reading Practice</a>
+                    <a href="game-5-sentencebuilding.html">Sentence Building</a>
+                    <a href="game-7-speakingpractice.html">Speaking Practice</a>
+                    <a href="game-7-writinggame.html">Writing Game</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    
+    <main>
+        <!-- Main Header -->
+        <header class="main-header">
+            <h1>Your Magical Journey Begins</h1>
+            <p>A little guide to help you find your way.</p>
+        </header>
+
+        <!-- Tutorial Content and Card Grid -->
+        <section class="main-content">
+            <div class="card-grid">
+                <!-- Our Philosophy Card (Instructional) -->
+                <div class="tutorial-card">
+                    <i class="fas fa-hat-wizard tutorial-icon"></i>
+                    <div class="card-text">
+                        <h3>Our Philosophy</h3>
+                        <p>We believe learning should be fun and interactive.</p>
+                    </div>
+                </div>
+                
+                <!-- Practice Card (Instructional) -->
+                <div class="tutorial-card">
+                    <i class="fas fa-magic tutorial-icon"></i>
+                    <div class="card-text">
+                        <h3>The Power of Practice</h3>
+                        <p>Practice with our daily mini-games.</p>
+                    </div>
+                </div>
+                
+                <!-- Get Started Card (Instructional) -->
+                <div class="tutorial-card">
+                    <i class="fas fa-book-open tutorial-icon"></i>
+                    <div class="card-text">
+                        <h3>Your First Steps</h3>
+                        <p>Start with the Writing or Listening game.</p>
+                    </div>
+                </div>
+
+                <!-- ALL MINI-GAME CARDS -->
+                <!-- English Tenses Card (Clickable) -->
+                <a href="game-1-englishtenses.html" class="game-card">
+                    <i class="fas fa-clock game-icon"></i>
+                    <div class="card-text">
+                        <h3>English Tenses</h3>
+                        <p>Master verb tenses easily.</p>
+                    </div>
+                </a>
+                
+  		<!-- Interactive Stories Card (Clickable) -->
+                <a href="game-2-interactive-stories.html" class="game-card">
+                    <i class="fas fa-book game-icon"></i>
+                    <div class="card-text">
+                        <h3>Interactive Stories</h3>
+                        <p>Explore stories and make choices.</p>
+                    </div>
+                </a>
+
+                <!-- Listening Practice Card (Clickable) -->
+                <a href="game-3-listeningpractice.html" class="game-card">
+                    <i class="fas fa-headphones game-icon"></i>
+                    <div class="card-text">
+                        <h3>Listening Practice</h3>
+                        <p>Sharpen your listening skills.</p>
+                    </div>
+                </a>
+
+                <!-- Medical Terminology Card (Clickable) -->
+                <a href="game-3-medicalterminology.html" class="game-card">
+                    <i class="fas fa-user-nurse game-icon"></i>
+                    <div class="card-text">
+                        <h3>Medical Terminology</h3>
+                        <p>Learn medical words and phrases.</p>
+                    </div>
+                </a>
+                
+                <!-- Reading Practice Card (Clickable) -->
+                <a href="game-4-readingpractice.html" class="game-card">
+                    <i class="fas fa-book-reader game-icon"></i>
+                    <div class="card-text">
+                        <h3>Reading Practice</h3>
+                        <p>Read stories to improve your skills.</p>
+                    </div>
+                </a>
+
+                <!-- Sentence Building Card (Clickable) -->
+                <a href="game-5-sentencebuilding.html" class="game-card">
+                    <i class="fas fa-puzzle-piece game-icon"></i>
+                    <div class="card-text">
+                        <h3>Sentence Building</h3>
+                        <p>Build correct English sentences.</p>
+                    </div>
+                </a>
+                
+                <!-- Speaking Practice Card (Clickable) -->
+                <a href="game-7-speakingpractice.html" class="game-card">
+                    <i class="fas fa-microphone game-icon"></i>
+                    <div class="card-text">
+                        <h3>Speaking Practice</h3>
+                        <p>Practice speaking with a friend.</p>
+                    </div>
+                </a>
+                
+                <!-- Writing Game Card (Clickable) -->
+                <a href="game-7-writinggame.html" class="game-card">
+                    <i class="fas fa-pen-nib game-icon"></i>
+                    <div class="card-text">
+                        <h3>Writing Game</h3>
+                        <p>Compose sentences with a magic quill.</p>
+                    </div>
+                </a>
+                
+                <!-- NEW RANDOM GAME CARD (Clickable) -->
+                <a href="#" class="game-card" onclick="playRandomGame(); return false;">
+                    <i class="fas fa-dice game-icon"></i>
+                    <div class="card-text">
+                        <h3>Play a Random Game</h3>
+                        <p>Feeling lucky? Let's test your skills.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+    <script>
+        // Array of all the game URLs
+        const games = [
+            "game-1-englishtenses.html",
+	    "game-2-interactive-stories.html" // Updated link for the new game
+            "game-3-listeningpractice.html",
+            "game-3-medicalterminology.html",
+            "game-4-readingpractice.html",
+            "game-5-sentencebuilding.html",
+            "game-7-speakingpractice.html",
+            "game-7-writinggame.html",
+        ];
+
+        // Function to select a random game and navigate to it
+        function playRandomGame() {
+            const randomIndex = Math.floor(Math.random() * games.length);
+            const randomGameUrl = games[randomIndex];
+            window.location.href = randomGameUrl;
+        }
+    </script>
+</body>
+</html>
